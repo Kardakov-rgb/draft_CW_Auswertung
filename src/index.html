@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Auswertung (Demo-Version)</title>
+    <meta name="description" content="Demo-Seite als Vorlage zur Übernahme ins bestehende System" />
+
+    <!-- Stylesheets: Reihenfolge ist relevant (Fonts -> Tokens -> Base -> Layout -> Components) -->
+    <link
+      rel="preload"
+      href="assets/fonts/montserrat-latin-wght-normal.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="assets/fonts/noto-serif-latin-wght-normal.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link rel="icon" href="data:," />
+    <link rel="stylesheet" href="css/fonts.css" />
+    <link rel="stylesheet" href="css/tokens.css" />
+    <link rel="stylesheet" href="css/base.css" />
+    <link rel="stylesheet" href="css/layout.css" />
+    <link rel="stylesheet" href="css/components.css" />
+  </head>
+  <body class="page">
+    <a class="skip-link" href="#main">Zum Inhalt springen</a>
+
+    <header class="site-header">
+      <div class="container site-header__inner">
+        <p class="site-header__title" data-app-title>Auswertung</p>
+        <p class="site-header__badge" data-app-badge>Demo-Version</p>
+      </div>
+    </header>
+
+    <main class="container page__main" id="main">
+      <h1>Auswertung</h1>
+      <p>Hier entsteht die Seite. Der Inhalt folgt Schritt für Schritt.</p>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">
+        <p class="site-footer__text">
+          Demo mit erfundenen Beispieldaten. Keine echten Namen, keine Zugangsdaten.
+        </p>
+      </div>
+    </footer>
+
+    <script type="module" src="js/main.js"></script>
+  </body>
+</html>

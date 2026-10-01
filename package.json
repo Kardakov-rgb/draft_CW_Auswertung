@@ -1,0 +1,13 @@
+{
+  "name": "draft-cw-auswertung",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Statische Demo-Seite (HTML, CSS, JavaScript) als Vorlage zur Übernahme ins bestehende System",
+  "scripts": {
+    "start": "npx --yes http-server src -p 3000 -c-1",
+    "format": "npx --yes prettier --write \"src/**/*.{html,css,js}\" \"tests/**/*.mjs\"",
+    "format:check": "npx --yes prettier --check \"src/**/*.{html,css,js}\" \"tests/**/*.mjs\"",
+    "test": "node --test"
+  }
+}
