@@ -21,6 +21,17 @@
   --color-border: #d9dcd2;
   --color-focus: var(--color-green-dark);
 
+  /* Text auf farbigen Flächen */
+  --color-on-primary: #ffffff;
+  --color-on-gray: #ffffff;
+  --color-on-accent: #1a1a1a;
+
+  /* Diagramme (Zuordnung Kategorie -> Farbe steht in js/config.js als Token-Name) */
+  --chart-improved: var(--color-accent);
+  --chart-stable: var(--color-primary);
+  --chart-unchanged: var(--color-gray);
+  --chart-bar-height: 5.5rem;
+
   /* Typografie */
   --font-sans: "Montserrat", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --font-serif: "Noto Serif", Georgia, "Times New Roman", serif;
@@ -38,4 +49,6 @@
   /* Layout */
   --container-max: 80rem;
   --border-width-accent: 0.25rem;
+  --report-width: 210mm; /* A4-Breite der Berichtsseite */
+  --report-padding: 12mm;
 }

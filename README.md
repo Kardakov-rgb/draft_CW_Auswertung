@@ -4,6 +4,8 @@ Statische Demo-Seite in reinem HTML, CSS und JavaScript (ES-Module), ohne Build-
 Laufzeit-Abhängigkeiten. Sie dient als Vorlage, die der IT-Dienstleister in das bestehende System
 übernimmt. Zweck, offene Fragen und Übergabehinweise: [docs/HANDOVER.md](docs/HANDOVER.md).
 
+Aktueller Stand: Auswertungsseite pro KPF mit Balkendiagrammen und PDF-Export (Browser-Druck).
+
 ## Schnellstart
 
 ```bash
@@ -30,7 +32,7 @@ src/
   index.html          Einstiegsseite
   css/                fonts -> tokens -> base -> layout -> components
   js/main.js          Einstiegspunkt
-  js/config.js        Konfiguration (Spalten, Optionen, Texte)
+  js/config.js        Konfiguration (Fächer, Kategorien, Farben-Token, Texte, Dateiname)
   js/components/      ein Modul pro UI-Komponente
   js/domain/          Fachlogik ohne DOM-Zugriff (getestet)
   js/services/        Ersatzpunkte: Anbindungen ans System (in der Demo simuliert)
@@ -40,6 +42,13 @@ src/
 tests/                Tests ohne Abhängigkeiten (npm test)
 docs/HANDOVER.md      Übergabe-Checkliste für den Dienstleister
 ```
+
+## Neues Fach oder neue Kategorie
+
+1. Fach: Eintrag in `SUBJECTS` in `src/js/config.js` (`key`, `label`, `chartTitle`, `text` mit `{share}`).
+2. Kategorie: Eintrag in `CATEGORIES` (`key`, `label`, `success`, `colorToken`, `textToken`); die
+   Farb-Token legst du in `src/css/tokens.css` an.
+3. Die Zahlen dazu liefert `getOutcomes()` in `src/js/data/outcomes.js`. Im Code ist nichts zu ändern.
 
 ## Konventionen
 

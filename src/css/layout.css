@@ -16,3 +16,23 @@
   margin-inline: auto;
   padding-inline: var(--space-3);
 }
+
+/* Druck / PDF: nur die Berichtsseite, A4. */
+@page {
+  size: A4;
+  margin: 0;
+}
+
+@media print {
+  .skip-link,
+  .site-header,
+  .site-footer,
+  .page__heading {
+    display: none;
+  }
+
+  .page__main {
+    padding: 0;
+    max-width: none;
+  }
+}

@@ -6,10 +6,35 @@ Entwurf einer Seite, die der Dienstleister in das bestehende System übernimmt. 
 Produktivanwendung**: Alle Daten sind erfunden, Anmeldung und Datenbank fehlen bewusst.
 Anbindungen übernimmt der Dienstleister an den unten genannten Ersatzpunkten.
 
-**Stand:** Grundstruktur (leere Seite mit Header und Footer). Fachliche Funktionen folgen.
+**Stand:** Funktion 1 ist fertig: Auswertungsseite pro KPF (CHANCENkurve) mit PDF-Export. Weitere folgen.
 
 - Organisation / Bereich: _noch zu ergänzen_
 - Ziel der Seite (ein Satz): _noch zu ergänzen_
+
+## Funktionen
+
+### 1. Auswertung der CHANCENkurve pro KPF mit PDF-Export
+
+- Die Person wählt eine **KPF** (Auswertung erfolgt pro KPF). Die Seite zeigt eine A4-Berichtsseite:
+  Titel, KPF-Name, Stand der Daten, Einleitung, je Fach (Mathe, Deutsch) ein **Balkendiagramm** und
+  ein Erklärtext. Das Diagramm wechselt je Fach die Seite (links/rechts), wie im Design.
+- Balken: Anteil der **Testungen** je Kategorie (Verbessert, Konstant auf hohem Niveau, Unverändert).
+  Die **Erfolgsquote** im Text (Verbessert + Konstant hoch) wird aus denselben Zahlen berechnet wie der
+  Balken (`domain/outcomes.js`), nicht von Hand gepflegt. Gezählt werden Testungen, nicht Kinder.
+- "Als PDF speichern" öffnet in der Demo den Druckdialog des Browsers. Der Seitentitel entspricht dem
+  vorgesehenen Dateinamen `CKurve_<KPF-Name>_<JJJJMMTT>.pdf` (Umlaute und Sonderzeichen bereinigt).
+  Das Datum ist der **Stand der Daten**, nicht das Erstellungsdatum.
+- Hat eine KPF keine Daten, zeigt die Seite einen Hinweis und der Export ist deaktiviert (Tooltip).
+- Fächer, Kategorien, Farben (als Token-Namen), Texte und Dateinamen-Präfix stehen in `src/js/config.js`.
+- **Bewusst offen / Entscheidung des Auftraggebers:** keine Mindestanzahl (n) für die Anzeige. Bei
+  kleinen Gruppen sind Prozentwerte wenig aussagekräftig und können Einzelne erkennbar machen:
+  Datenschutz mit dem Dienstleister klären. Ein Status "Zwischenstand/Final" ist nicht vorgesehen.
+  Die Aussage "Ergebnisse zeigen ..." beschreibt Entwicklungen, keine nachgewiesene Wirkung
+  (keine Vergleichsgruppe): Formulierung fachlich prüfen.
+- **Rollen:** Schulteambegleitung und Ansprechperson sehen nur die KPFs ihrer Zuordnung. Die Demo
+  hat keine Anmeldung; `getKpfs()` liefert in der Produktivversion nur erlaubte KPFs.
+- **Platzhalter im Layout:** Logo und Fußzeile (Name, Anschrift, Kontakt) übernimmt der Dienstleister
+  aus dem Corporate-Design-Template. Echte Organisationsdaten stehen nicht im öffentlichen Repo.
 
 ## Offene Fragen an den Dienstleister
 
@@ -29,11 +54,11 @@ Anbindungen übernimmt der Dienstleister an den unten genannten Ersatzpunkten.
 
 ## Ersatzpunkte (Demo gegen Produktiv)
 
-Bisher keine. Jeder Ersatzpunkt wird hier eingetragen, sobald er entsteht:
-
 | Ersatzpunkt (Datei und Funktion) | Demo-Variante | Produktiv-Variante | Rückgabeformat |
 | -------------------------------- | ------------- | ------------------ | -------------- |
-| _folgt_                          |               |                    |                |
+| `src/js/data/kpfs.js` `getKpfs()` | drei erfundene KPFs | KPFs aus der Datenbank, nach Rolle und Zuordnung der angemeldeten Person gefiltert | `Promise<Array<{ id, name }>>` |
+| `src/js/data/outcomes.js` `getOutcomes(kpfId)` | erfundene Zahlen im Code | Anzahl der Testungen je Fach und Kategorie aus der Datenbank (Berechtigung prüfen) | `Promise<{ kpfId, asOf: "JJJJ-MM-TT", results: { [fach]: { [kategorie]: Zahl } } }>` |
+| `src/js/services/pdfExportService.js` `exportReportPdf({ fileName })` | Druckdialog des Browsers (`window.print()`) | serverseitige PDF-Erzeugung mit diesem Layout; Datei als Download oder in neuem Tab | `Promise<void>` |
 
 Regel: Die Oberfläche bleibt unverändert, solange Signatur und Rückgabeformat der Ersatzpunkte
 erhalten bleiben.
@@ -44,6 +69,8 @@ erhalten bleiben.
   oder Zugangsdaten im Repository.
 - Schriften (Montserrat, Noto Serif) liegen lokal in `src/assets/fonts/`. Es werden keine Daten von
   Drittservern geladen.
+- Die Fußzeile der Berichtsseite ist ein Platzhalter. Echte Namen, Adressen und Bankdaten der
+  Organisation gehören nicht in dieses öffentliche Repository.
 - Es gibt keine Anmeldung, keine Rechteprüfung und keine serverseitige Validierung. Beides gehört in
   die Produktivversion (Aufgabe des Dienstleisters).
 - Personenbezogene Daten (sobald angebunden): Zweckbindung, Löschkonzept und Protokollierung mit dem

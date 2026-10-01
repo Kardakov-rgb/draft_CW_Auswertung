@@ -39,8 +39,17 @@
     </header>
 
     <main class="container page__main" id="main">
-      <h1>Auswertung</h1>
-      <p>Hier entsteht die Seite. Der Inhalt folgt Schritt für Schritt.</p>
+      <h1 class="page__heading">Auswertung</h1>
+
+      <div class="toolbar" role="group" aria-label="Ansicht">
+        <label class="toolbar__field">
+          <span class="toolbar__label">KPF</span>
+          <select class="toolbar__select" data-kpf-select></select>
+        </label>
+        <button class="button button--primary" type="button" data-export>Als PDF speichern</button>
+      </div>
+
+      <article class="report" data-report aria-label="Berichtsvorschau"></article>
     </main>
 
     <footer class="site-footer">
