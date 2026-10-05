@@ -64,15 +64,25 @@ export const REPORT = {
   intro:
     "Die CHANCENkurve ist eine datengestützte Lernverlaufsdiagnostik zur Erfassung des individuellen Lernfortschritts. Sie wird in der Regel alle 4 bis 6 Wochen direkt im Rahmen der Lernförderung durchgeführt.",
   scopeLabel: "KPF",
-  asOfLabel: "Stand",
+  periodLabel: "Zeitraum",
   /* Platzhalter: Logo und Fußzeile übernimmt der Dienstleister aus dem Corporate-Design-Template. */
   logoPlaceholder: "Logo",
   footer: "Platzhalter für Fußzeile (Name, Anschrift, Kontakt der Organisation)",
-  emptyMessage: "Für diese KPF liegen noch keine Auswertungsdaten vor.",
+  emptyMessage: "Für diese KPF liegen im gewählten Zeitraum keine Auswertungsdaten vor.",
 };
 
 /* Achsenbeschriftung des Balkens in Prozent. */
 export const AXIS_TICKS = [0, 20, 40, 60, 80, 100];
 
-/* Dateiname des PDFs: {FILE.prefix}_{KPF-Name}_{JJJJMMTT}.pdf */
+/* Zeitraum-Filter. Standard: Beginn des laufenden Schuljahres bis heute.
+   schoolYearStart: Monat (1-12) und Tag, an dem das Schuljahr beginnt (hier 01.08.). */
+export const DATE_FILTER = {
+  schoolYearStart: { month: 8, day: 1 },
+  errors: {
+    missing: "Bitte Von- und Bis-Datum angeben.",
+    order: "Das Von-Datum darf nicht nach dem Bis-Datum liegen.",
+  },
+};
+
+/* Dateiname des PDFs: {FILE.prefix}_{KPF-Name}_{von JJJJMMTT}-{bis JJJJMMTT}.pdf */
 export const FILE = { prefix: "CKurve" };

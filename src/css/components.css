@@ -87,6 +87,25 @@
   font: inherit;
 }
 
+.toolbar__select[aria-invalid] {
+  border-color: var(--color-highlight);
+  border-width: 2px;
+}
+
+.toolbar__error {
+  min-height: 1.5em;
+  margin: 0 0 var(--space-3);
+  font-family: var(--font-sans);
+  font-size: var(--font-size-small);
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.toolbar__error:not(:empty)::before {
+  content: "⚠ ";
+  color: var(--color-highlight);
+}
+
 /* Button */
 .button {
   padding: var(--space-2) var(--space-3);
@@ -279,7 +298,8 @@
 }
 
 @media print {
-  .toolbar {
+  .toolbar,
+  .toolbar__error {
     display: none;
   }
 

@@ -1,6 +1,7 @@
 /* Berichtsseite (A4-Layout, auch Vorlage für das PDF): Kopf, Einleitung, je Fach Text und Diagramm. */
 import { CATEGORIES, REPORT, SUBJECTS } from "../config.js";
 import { fillTemplate, formatPercent, summarizeOutcomes } from "../domain/outcomes.js";
+import { formatIsoDate } from "../domain/dateRange.js";
 import { createBarChart } from "./barChart.js";
 
 function el(tag, className, text) {
@@ -8,10 +9,6 @@ function el(tag, className, text) {
   if (className) node.className = className;
   if (text !== undefined) node.textContent = text;
   return node;
-}
-
-function formatDate(isoDate, locale) {
-  return new Intl.DateTimeFormat(locale, { dateStyle: "medium" }).format(new Date(isoDate));
 }
 
 /* Liefert false, wenn für kein Fach Daten vorliegen (dann ist der Export nicht sinnvoll). */
@@ -28,7 +25,7 @@ export function renderReport(container, { kpf, outcomes, locale }) {
     el(
       "p",
       "report__meta",
-      `${REPORT.scopeLabel}: ${kpf.name} · ${REPORT.asOfLabel}: ${formatDate(outcomes.asOf, locale)}`,
+      `${REPORT.scopeLabel}: ${kpf.name} · ${REPORT.periodLabel}: ${formatIsoDate(outcomes.period.from, locale)} – ${formatIsoDate(outcomes.period.to, locale)}`,
     ),
   );
   header.append(heading, el("div", "report__logo", REPORT.logoPlaceholder));

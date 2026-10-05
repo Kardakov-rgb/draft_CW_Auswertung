@@ -1,7 +1,7 @@
 /* Konfiguration lässt sich ohne Browser laden und ist in sich stimmig. */
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { APP, AXIS_TICKS, CATEGORIES, SUBJECTS } from "../src/js/config.js";
+import { APP, AXIS_TICKS, CATEGORIES, DATE_FILTER, SUBJECTS } from "../src/js/config.js";
 
 test("APP enthält Titel, Badge und Sprache", () => {
   assert.equal(typeof APP.title, "string");
@@ -26,4 +26,9 @@ test("Fächer haben eindeutige Schlüssel und einen Text mit {share}", () => {
 test("Achse reicht von 0 bis 100", () => {
   assert.equal(AXIS_TICKS[0], 0);
   assert.equal(AXIS_TICKS.at(-1), 100);
+});
+
+test("Schuljahresbeginn ist ein gültiges Datum", () => {
+  const { month, day } = DATE_FILTER.schoolYearStart;
+  assert.ok(month >= 1 && month <= 12 && day >= 1 && day <= 31);
 });

@@ -16,15 +16,22 @@ Anbindungen übernimmt der Dienstleister an den unten genannten Ersatzpunkten.
 ### 1. Auswertung der CHANCENkurve pro KPF mit PDF-Export
 
 - Die Person wählt eine **KPF** (Auswertung erfolgt pro KPF). Die Seite zeigt eine A4-Berichtsseite:
-  Titel, KPF-Name, Stand der Daten, Einleitung, je Fach (Mathe, Deutsch) ein **Balkendiagramm** und
+  Titel, KPF-Name, Zeitraum, Einleitung, je Fach (Mathe, Deutsch) ein **Balkendiagramm** und
   ein Erklärtext. Das Diagramm wechselt je Fach die Seite (links/rechts), wie im Design.
 - Balken: Anteil der **Testungen** je Kategorie (Verbessert, Konstant auf hohem Niveau, Unverändert).
   Die **Erfolgsquote** im Text (Verbessert + Konstant hoch) wird aus denselben Zahlen berechnet wie der
   Balken (`domain/outcomes.js`), nicht von Hand gepflegt. Gezählt werden Testungen, nicht Kinder.
 - "Als PDF speichern" öffnet in der Demo den Druckdialog des Browsers. Der Seitentitel entspricht dem
-  vorgesehenen Dateinamen `CKurve_<KPF-Name>_<JJJJMMTT>.pdf` (Umlaute und Sonderzeichen bereinigt).
-  Das Datum ist der **Stand der Daten**, nicht das Erstellungsdatum.
-- Hat eine KPF keine Daten, zeigt die Seite einen Hinweis und der Export ist deaktiviert (Tooltip).
+  vorgesehenen Dateinamen `CKurve_<KPF-Name>_<von JJJJMMTT>-<bis JJJJMMTT>.pdf` (Umlaute und
+  Sonderzeichen bereinigt). Das Datum im Namen ist der ausgewertete Zeitraum, nicht das Erstellungsdatum.
+- **Zeitraum-Filter (Von/Bis):** Standard ist der **01.08. des laufenden Schuljahres bis heute**
+  (liegt heute vor dem 01.08., beginnt das Schuljahr am 01.08. des Vorjahres). Beide Grenzen gehören
+  zum Zeitraum. Der Filter wirkt auf das **Datum der Testung**. "Schuljahr zurücksetzen" stellt den
+  Standard wieder her. Ungültige Eingaben (leer, Von nach Bis) zeigen eine Meldung, der Export ist
+  dann gesperrt. "Bis" und "Von" können nicht in der Zukunft liegen. Schuljahresbeginn: `DATE_FILTER`
+  in `src/js/config.js`. "Heute" ist das Datum im Browser der Person, nicht des Servers: Der
+  Dienstleister prüft, ob die Datenbank denselben Tag (Zeitzone) verwendet.
+- Hat eine KPF im Zeitraum keine Daten, zeigt die Seite einen Hinweis und der Export ist deaktiviert (Tooltip).
 - Fächer, Kategorien, Farben (als Token-Namen), Texte und Dateinamen-Präfix stehen in `src/js/config.js`.
 - **Bewusst offen / Entscheidung des Auftraggebers:** keine Mindestanzahl (n) für die Anzeige. Bei
   kleinen Gruppen sind Prozentwerte wenig aussagekräftig und können Einzelne erkennbar machen:
@@ -57,7 +64,7 @@ Anbindungen übernimmt der Dienstleister an den unten genannten Ersatzpunkten.
 | Ersatzpunkt (Datei und Funktion) | Demo-Variante | Produktiv-Variante | Rückgabeformat |
 | -------------------------------- | ------------- | ------------------ | -------------- |
 | `src/js/data/kpfs.js` `getKpfs()` | drei erfundene KPFs | KPFs aus der Datenbank, nach Rolle und Zuordnung der angemeldeten Person gefiltert | `Promise<Array<{ id, name }>>` |
-| `src/js/data/outcomes.js` `getOutcomes(kpfId)` | erfundene Zahlen im Code | Anzahl der Testungen je Fach und Kategorie aus der Datenbank (Berechtigung prüfen) | `Promise<{ kpfId, asOf: "JJJJ-MM-TT", results: { [fach]: { [kategorie]: Zahl } } }>` |
+| `src/js/data/outcomes.js` `getOutcomes(kpfId, { from, to })` | erfundene Testungen mit Datum, im Code erzeugt und nach Zeitraum gefiltert | Anzahl der Testungen je Fach und Kategorie, Testdatum zwischen `from` und `to` (beide inklusive), direkt in der Datenbank aggregiert (Berechtigung prüfen) | `Promise<{ kpfId, period: { from, to }, results: { [fach]: { [kategorie]: Zahl } } }>` (Daten als `JJJJ-MM-TT`) |
 | `src/js/services/pdfExportService.js` `exportReportPdf({ fileName })` | Druckdialog des Browsers (`window.print()`) | serverseitige PDF-Erzeugung mit diesem Layout; Datei als Download oder in neuem Tab | `Promise<void>` |
 
 Regel: Die Oberfläche bleibt unverändert, solange Signatur und Rückgabeformat der Ersatzpunkte

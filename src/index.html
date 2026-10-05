@@ -46,8 +46,19 @@
           <span class="toolbar__label">KPF</span>
           <select class="toolbar__select" data-kpf-select></select>
         </label>
+        <label class="toolbar__field">
+          <span class="toolbar__label">Von</span>
+          <input class="toolbar__select" type="date" data-date-from />
+        </label>
+        <label class="toolbar__field">
+          <span class="toolbar__label">Bis</span>
+          <input class="toolbar__select" type="date" data-date-to />
+        </label>
+        <button class="button" type="button" data-date-reset>Schuljahr zurücksetzen</button>
         <button class="button button--primary" type="button" data-export>Als PDF speichern</button>
       </div>
+
+      <p class="toolbar__error" role="alert" data-date-error></p>
 
       <article class="report" data-report aria-label="Berichtsvorschau"></article>
     </main>

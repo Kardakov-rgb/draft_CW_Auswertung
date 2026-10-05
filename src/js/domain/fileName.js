@@ -1,4 +1,4 @@
-/* Dateiname für den PDF-Export (ohne DOM). Schema: Präfix_Name_JJJJMMTT.pdf */
+/* Dateiname für den PDF-Export (ohne DOM). Schema: Präfix_Name_VON-BIS.pdf (Daten als JJJJMMTT) */
 
 const UMLAUTS = { ä: "ae", ö: "oe", ü: "ue", Ä: "Ae", Ö: "Oe", Ü: "Ue", ß: "ss" };
 
@@ -12,9 +12,8 @@ export function sanitizeForFileName(text) {
     .replace(/^-+|-+$/g, "");
 }
 
-/* date: Date oder ISO-Text "JJJJ-MM-TT". */
-export function buildFileName({ prefix, name, date }) {
-  const iso = typeof date === "string" ? date : date.toISOString();
-  const compactDate = iso.slice(0, 10).replaceAll("-", "");
-  return `${prefix}_${sanitizeForFileName(name)}_${compactDate}.pdf`;
+/* from, to: ISO-Text "JJJJ-MM-TT". */
+export function buildFileName({ prefix, name, from, to }) {
+  const compact = (iso) => iso.replaceAll("-", "");
+  return `${prefix}_${sanitizeForFileName(name)}_${compact(from)}-${compact(to)}.pdf`;
 }

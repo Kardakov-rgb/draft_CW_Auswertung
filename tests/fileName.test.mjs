@@ -10,9 +10,14 @@ test("sanitizeForFileName entfernt Akzente", () => {
   assert.equal(sanitizeForFileName("Café Zoë"), "Cafe-Zoe");
 });
 
-test("buildFileName: Schema Präfix_Name_JJJJMMTT.pdf", () => {
+test("buildFileName: Schema Präfix_Name_VON-BIS.pdf", () => {
   assert.equal(
-    buildFileName({ prefix: "CKurve", name: "KPF Beispiel A", date: "2026-09-22" }),
-    "CKurve_KPF-Beispiel-A_20260922.pdf",
+    buildFileName({
+      prefix: "CKurve",
+      name: "KPF Beispiel A",
+      from: "2026-08-01",
+      to: "2026-10-05",
+    }),
+    "CKurve_KPF-Beispiel-A_20260801-20261005.pdf",
   );
 });
