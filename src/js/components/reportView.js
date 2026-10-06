@@ -1,15 +1,8 @@
 /* Berichtsseite (A4-Layout, auch Vorlage für das PDF): Kopf, Einleitung, je Fach Text und Diagramm. */
 import { CATEGORIES, REPORT, SUBJECTS } from "../config.js";
 import { fillTemplate, formatPercent, summarizeOutcomes } from "../domain/outcomes.js";
-import { formatIsoDate } from "../domain/dateRange.js";
 import { createBarChart } from "./barChart.js";
-
-function el(tag, className, text) {
-  const node = document.createElement(tag);
-  if (className) node.className = className;
-  if (text !== undefined) node.textContent = text;
-  return node;
-}
+import { createReportFooter, createReportHeader, el, periodText } from "./reportParts.js";
 
 /* Liefert false, wenn für kein Fach Daten vorliegen (dann ist der Export nicht sinnvoll). */
 export function renderReport(container, { kpf, outcomes, locale }) {
@@ -18,17 +11,10 @@ export function renderReport(container, { kpf, outcomes, locale }) {
     summary: summarizeOutcomes(outcomes.results[subject.key], CATEGORIES),
   })).filter(({ summary }) => summary.total > 0);
 
-  const header = el("header", "report__header");
-  const heading = el("div");
-  heading.append(
-    el("h2", "report__title", REPORT.title),
-    el(
-      "p",
-      "report__meta",
-      `${REPORT.scopeLabel}: ${kpf.name} · ${REPORT.periodLabel}: ${formatIsoDate(outcomes.period.from, locale)} – ${formatIsoDate(outcomes.period.to, locale)}`,
-    ),
-  );
-  header.append(heading, el("div", "report__logo", REPORT.logoPlaceholder));
+  const header = createReportHeader({
+    title: REPORT.title,
+    meta: `${REPORT.scopeLabel}: ${kpf.name} · ${periodText(outcomes.period, locale)}`,
+  });
 
   const body = [header];
   if (summaries.length === 0) {
@@ -52,7 +38,7 @@ export function renderReport(container, { kpf, outcomes, locale }) {
       body.push(section);
     });
   }
-  body.push(el("footer", "report__footer", REPORT.footer));
+  body.push(createReportFooter());
 
   container.replaceChildren(...body);
   return summaries.length > 0;

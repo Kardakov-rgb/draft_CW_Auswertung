@@ -86,3 +86,54 @@ export const DATE_FILTER = {
 
 /* Dateiname des PDFs: {FILE.prefix}_{KPF-Name}_{von JJJJMMTT}-{bis JJJJMMTT}.pdf */
 export const FILE = { prefix: "CKurve" };
+
+/* ---------- Auswertung pro Kind ---------- */
+
+/* Linien im Verlaufsdiagramm. Gesamt wird aus richtig + falsch berechnet (nicht geliefert).
+   marker: circle | square | triangle (verschiedene Formen, damit nicht nur die Farbe unterscheidet) */
+export const SERIES = [
+  { key: "total", label: "Gesamt beantwortet", colorToken: "--chart-total", marker: "circle" },
+  { key: "correct", label: "Richtig beantwortet", colorToken: "--chart-correct", marker: "square" },
+  { key: "wrong", label: "Falsch beantwortet", colorToken: "--chart-wrong", marker: "triangle" },
+];
+
+export const CHILD = {
+  /* Ein Verlauf wird erst ab dieser Zahl an Testzeitpunkten gezeigt (1 und 2 werden nicht gezeigt). */
+  minTestPoints: 3,
+  /* Höchstzahl beschrifteter Testzeitpunkte auf der x-Achse, sonst wird ausgedünnt. */
+  maxXLabels: 12,
+  pageTitle: "Auswertung",
+  listTitle: "Kinderliste",
+  listIntro:
+    "Alle Kinder dieser KPF im gewählten Zeitraum. Kinder ohne Test haben keine eigene Seite.",
+  chartTitle: "Entwicklung der Antwortzahlen ({subject})",
+  xAxisTitle: "Testzeitpunkt",
+  yAxisTitle: "Anzahl Aufgaben",
+  tableCaption: "Werte je Testzeitpunkt ({subject})",
+  tooFewMessage:
+    "Ein Verlauf wird ab {min} Testzeitpunkten gezeigt. Im Zeitraum liegen {count} vor.",
+  noTestsMessage: "Im Zeitraum wurde in diesem Fach kein Test durchgeführt.",
+  emptyListMessage: "Für diese KPF liegen keine Kinder vor.",
+  noValue: "–",
+};
+
+/* Spalten der Kinderliste und Felder im Infoblock einer Kinder-Seite, in dieser Reihenfolge.
+   type: text | subjects | testCount | level (Darstellung in components/childFields.js)
+   Neue Angabe = Eintrag hier (+ ggf. Darstellung in childFields.js). */
+export const CHILD_FIELDS = [
+  { key: "name", label: "Name", type: "text" },
+  { key: "grade", label: "Klasse", type: "text" },
+  { key: "subjects", label: "Fächer", type: "subjects" },
+  { key: "testCount", label: "Anzahl Tests", type: "testCount" },
+  { key: "level", label: "Niveau (Levumi)", type: "level" },
+];
+
+/* Spalten der Wertetabelle unter dem Diagramm. type: number | date | percent */
+export const CHILD_TABLE_COLUMNS = [
+  { key: "testNumber", label: "Testzeitpunkt", type: "number" },
+  { key: "date", label: "Datum", type: "date" },
+  { key: "total", label: "Gesamt", type: "number" },
+  { key: "correct", label: "Richtig", type: "number" },
+  { key: "wrong", label: "Falsch", type: "number" },
+  { key: "correctShare", label: "Richtig in %", type: "percent" },
+];

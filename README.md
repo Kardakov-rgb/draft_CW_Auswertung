@@ -4,7 +4,7 @@ Statische Demo-Seite in reinem HTML, CSS und JavaScript (ES-Module), ohne Build-
 Laufzeit-Abhängigkeiten. Sie dient als Vorlage, die der IT-Dienstleister in das bestehende System
 übernimmt. Zweck, offene Fragen und Übergabehinweise: [docs/HANDOVER.md](docs/HANDOVER.md).
 
-Aktueller Stand: Auswertungsseite pro KPF mit Zeitraum-Filter, Balkendiagrammen und PDF-Export (Browser-Druck).
+Aktueller Stand: Auswertungsseite pro KPF mit Zeitraum-Filter und Balkendiagrammen, Kinderliste und Auswertung pro Kind (Liniendiagramme), alles in einer Sammel-PDF (Browser-Druck).
 
 ## Schnellstart
 
@@ -32,9 +32,9 @@ src/
   index.html          Einstiegsseite
   css/                fonts -> tokens -> base -> layout -> components
   js/main.js          Einstiegspunkt
-  js/config.js        Konfiguration (Fächer, Kategorien, Farben-Token, Texte, Schuljahresbeginn, Dateiname)
+  js/config.js        Konfiguration (Fächer, Kategorien, Linien, Kinder-Felder, Texte, Schuljahresbeginn, Dateiname)
   js/components/      ein Modul pro UI-Komponente
-  js/domain/          Fachlogik ohne DOM-Zugriff (getestet)
+  js/domain/          Fachlogik ohne DOM-Zugriff (getestet): Anteile, Zeitraum, Kind-Verlauf, Achsen, Dateiname
   js/services/        Ersatzpunkte: Anbindungen ans System (in der Demo simuliert)
   js/data/            Ersatzpunkte: Daten (in der Demo erfunden)
   js/vendor/          Fremdbibliotheken, unverändert, mit Lizenz

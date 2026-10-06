@@ -1,11 +1,15 @@
 /* Einstiegspunkt: lädt Daten, verdrahtet Komponenten.
    Fachlogik liegt in domain/ (ohne DOM), Anbindungen an das System in services/ und data/. */
-import { APP, DATE_FILTER, FILE } from "./config.js";
+import { APP, CHILD, DATE_FILTER, FILE, SUBJECTS } from "./config.js";
 import { getKpfs } from "./data/kpfs.js";
+import { getChildReports } from "./data/children.js";
 import { getOutcomes } from "./data/outcomes.js";
 import { defaultDateRange, toIsoDate, validateDateRange } from "./domain/dateRange.js";
+import { summarizeChild } from "./domain/childProgress.js";
 import { buildFileName } from "./domain/fileName.js";
 import { exportReportPdf } from "./services/pdfExportService.js";
+import { renderChildPages } from "./components/childView.js";
+import { createPage } from "./components/reportParts.js";
 import { renderReport } from "./components/reportView.js";
 import { initToolbar } from "./components/toolbar.js";
 
@@ -16,7 +20,7 @@ async function init() {
 
   const today = new Date();
   const kpfs = await getKpfs();
-  const container = document.querySelector("[data-report]");
+  const documentEl = document.querySelector("[data-document]");
   const defaultRange = defaultDateRange(today, DATE_FILTER.schoolYearStart);
   let range = defaultRange;
   let current = null;
@@ -26,11 +30,27 @@ async function init() {
   async function show() {
     const id = ++requestId;
     const kpf = kpfs.find((item) => item.id === toolbar.selectedId());
-    const outcomes = await getOutcomes(kpf.id, range);
+    const [outcomes, childReports] = await Promise.all([
+      getOutcomes(kpf.id, range),
+      getChildReports(kpf.id, range),
+    ]);
     if (id !== requestId) return;
-    const hasData = renderReport(container, { kpf, outcomes, locale: APP.locale });
+
+    const reportPage = createPage("Auswertung der KPF");
+    const hasReportData = renderReport(reportPage, { kpf, outcomes, locale: APP.locale });
+    const summaries = childReports.map((report) =>
+      summarizeChild(report, SUBJECTS, CHILD.minTestPoints),
+    );
+    const childPages = renderChildPages({
+      kpf,
+      period: outcomes.period,
+      summaries,
+      locale: APP.locale,
+    });
+    documentEl.replaceChildren(reportPage, ...childPages);
+
     current = { kpf, outcomes };
-    toolbar.setExportEnabled(hasData);
+    toolbar.setExportEnabled(hasReportData || summaries.some((summary) => summary.hasData));
   }
 
   function changeRange(next) {

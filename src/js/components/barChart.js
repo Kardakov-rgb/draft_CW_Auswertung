@@ -2,13 +2,7 @@
    Segmentbreite = Anzahl (flex-grow), Beschriftung steht als Text im Segment (barrierefrei). */
 import { AXIS_TICKS, CATEGORIES } from "../config.js";
 import { formatPercent } from "../domain/outcomes.js";
-
-function el(tag, className, text) {
-  const node = document.createElement(tag);
-  if (className) node.className = className;
-  if (text !== undefined) node.textContent = text;
-  return node;
-}
+import { el } from "./reportParts.js";
 
 export function createBarChart({ title, summary, locale }) {
   const figure = el("figure", "bar-chart");
