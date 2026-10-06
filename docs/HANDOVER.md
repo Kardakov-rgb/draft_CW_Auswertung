@@ -6,7 +6,7 @@ Entwurf einer Seite, die der Dienstleister in das bestehende System übernimmt. 
 Produktivanwendung**: Alle Daten sind erfunden, Anmeldung und Datenbank fehlen bewusst.
 Anbindungen übernimmt der Dienstleister an den unten genannten Ersatzpunkten.
 
-**Stand:** Funktion 1 ist fertig: Auswertungsseite pro KPF (CHANCENkurve) mit PDF-Export. Weitere folgen.
+**Stand:** Auswertung pro KPF (Funktion 1), Zeitraum-Filter, Kinderliste und Auswertung pro Kind mit einer Sammel-PDF (Funktion 2). Weitere folgen.
 
 - Organisation / Bereich: _noch zu ergänzen_
 - Ziel der Seite (ein Satz): _noch zu ergänzen_
@@ -43,6 +43,28 @@ Anbindungen übernimmt der Dienstleister an den unten genannten Ersatzpunkten.
 - **Platzhalter im Layout:** Logo und Fußzeile (Name, Anschrift, Kontakt) übernimmt der Dienstleister
   aus dem Corporate-Design-Template. Echte Organisationsdaten stehen nicht im öffentlichen Repo.
 
+### 2. Kinderliste und Auswertung pro Kind (Sammel-PDF)
+
+- Hinter dem KPF-Bericht folgt eine **Kinderliste** (Name, Klasse, Fächer, Anzahl Tests, Niveau) und
+  danach **eine Seite je Kind**. Alles zusammen ist **eine einzige PDF** ("Als PDF speichern"). Es gibt
+  keine Einzel-PDF je Kind. In der Liste führt der Name zur Kind-Seite.
+- **Kind-Seite:** Infoblock und je Fach ein Liniendiagramm "Entwicklung der Antwortzahlen" mit den Linien
+  Gesamt, Richtig und Falsch (unterschiedliche Formen und Farben) und einer Wertetabelle (Testzeitpunkt,
+  Datum, Gesamt, Richtig, Falsch, Richtig in %). Die Tabelle ist zugleich die barrierefreie Alternative zum
+  Diagramm. **Gesamt wird berechnet** (richtig + falsch), nicht geliefert.
+- **Mindestanzahl:** Ein Verlauf wird erst ab **3 Testzeitpunkten** je Fach gezeigt (`CHILD.minTestPoints`).
+  Bei 1 oder 2 steht stattdessen ein Hinweis, bei 0 ebenfalls. Die Tests zählen trotzdem in "Anzahl Tests".
+- Kinder ohne einen Test im Zeitraum stehen in der Liste, haben aber **keine eigene Seite**.
+- **Gleicher Zeitraum-Filter** wie beim KPF-Bericht. Die x-Achse beschriftet die Testnummer aus den Daten
+  (`testNumber`), nicht eine neue Zählung im Zeitraum.
+- **Kein automatischer Fließtext** über einzelne Kinder, nur Zahlen und Grafik. (Bitte bestätigen.)
+- Angezeigte Angaben je Kind: `CHILD_FIELDS` in `src/js/config.js` (Name, Klasse, Fächer, Anzahl Tests,
+  Niveau). Tabellenspalten: `CHILD_TABLE_COLUMNS`, Linien: `SERIES`.
+- **Klarnamen:** Die Demo nutzt erfundene Namen. Produktiv sollen **Klarnamen** erscheinen. Das macht
+  Seite und PDF zu personenbezogenen Daten Minderjähriger. Vor Echtbetrieb: Rechtsgrundlage und
+  Verarbeitungsverzeichnis, Rechteprüfung auf dem Server (nur Kinder der eigenen KPFs), Protokollierung
+  der PDF-Erzeugung, Aufbewahrung und Weitergabe der PDF klären. **Der Dateiname enthält keinen Kindernamen.**
+
 ## Offene Fragen an den Dienstleister
 
 1. **Zielsystem:** Welche Technik nutzt das bestehende System (Framework, Templates, Build)? Soll die
@@ -65,10 +87,44 @@ Anbindungen übernimmt der Dienstleister an den unten genannten Ersatzpunkten.
 | -------------------------------- | ------------- | ------------------ | -------------- |
 | `src/js/data/kpfs.js` `getKpfs()` | drei erfundene KPFs | KPFs aus der Datenbank, nach Rolle und Zuordnung der angemeldeten Person gefiltert | `Promise<Array<{ id, name }>>` |
 | `src/js/data/outcomes.js` `getOutcomes(kpfId, { from, to })` | erfundene Testungen mit Datum, im Code erzeugt und nach Zeitraum gefiltert | Anzahl der Testungen je Fach und Kategorie, Testdatum zwischen `from` und `to` (beide inklusive), direkt in der Datenbank aggregiert (Berechtigung prüfen) | `Promise<{ kpfId, period: { from, to }, results: { [fach]: { [kategorie]: Zahl } } }>` (Daten als `JJJJ-MM-TT`) |
-| `src/js/services/pdfExportService.js` `exportReportPdf({ fileName })` | Druckdialog des Browsers (`window.print()`) | serverseitige PDF-Erzeugung mit diesem Layout; Datei als Download oder in neuem Tab | `Promise<void>` |
+| `src/js/data/children.js` `getChildReports(kpfId, { from, to })` | erfundene Kinder und Testzeitpunkte im Code | Kinder der KPF mit Testzeitpunkten, aus den Rohdaten zusammengesetzt (siehe unten), Klarnamen aus der Benutzerverwaltung, nur für berechtigte Personen. Eine Abfrage für die ganze KPF, nicht je Kind. | `Promise<Array<{ child: { id, name, grade }, results: { [fach]: Array<{ testNumber, date, correct, wrong, level }> } }>>` |
+| `src/js/services/pdfExportService.js` `exportReportPdf({ fileName })` | Druckdialog des Browsers (`window.print()`) | serverseitige PDF-Erzeugung mit diesem Layout (KPF-Bericht, Kinderliste, Kind-Seiten in einer Datei); Datei als Download oder in neuem Tab | `Promise<void>` |
 
 Regel: Die Oberfläche bleibt unverändert, solange Signatur und Rückgabeformat der Ersatzpunkte
 erhalten bleiben.
+
+## Von den Rohdaten zur Auswertung
+
+Die Testdaten liegen als Rohdaten vor und müssen zu den Zahlen für `getChildReports()` und
+`getOutcomes()` zusammengesetzt werden. Das ist eine **eigene Aufgabe für den Dienstleister**
+(Aggregation in der Datenbank oder im Server, nicht im Browser). Die Demo zeigt nur das Ergebnis.
+
+Bekannte Spalten der Rohdaten: `_id; userID; lessonID; exerciseID; testNumber; date; kpf; grade; type;
+answer; result; levumi_subject; levumi_level; levumi_math_category; levumi_overall_answered;
+levumi_correctly_answered; levumi_correctly_answered_percent; levumi_reading_accuracy;
+levumi_reading_speed_in_questions_per_minute; has_merged_data`. Die **Anwesenheit** kommt aus einer
+anderen Datenquelle und wird von der Demo noch nicht verwendet.
+
+**ANNAHME, bitte mit Dienstleister und Fachseite bestätigen** (aus den Spaltennamen abgeleitet, nicht aus
+Beispielzeilen):
+
+| Ziel in der Auswertung | Rohdaten | Bemerkung |
+| ---------------------- | -------- | --------- |
+| Kind (`child.id`) | `userID` | Klarname aus der Benutzerverwaltung (steht nicht in den Rohdaten) |
+| Klasse (`child.grade`) | `grade` | |
+| KPF-Zugehörigkeit | `kpf` | Filter je KPF |
+| Fach (Schlüssel in `SUBJECTS`) | `levumi_subject` | Zuordnung der Werte zu `math`/`german` klären |
+| Testzeitpunkt (`testNumber`, `date`) | `testNumber`, `date` | Zählt `testNumber` je Kind und Fach oder je Schuljahr? |
+| Richtig (`correct`) | `levumi_correctly_answered` | je Test |
+| Falsch (`wrong`) | `levumi_overall_answered` minus `levumi_correctly_answered` | Gesamt = richtig + falsch |
+| Niveau (`level`) | `levumi_level` | Bedeutung und Werte klären (Zahl oder Text) |
+| nicht verwendet | `_id`, `lessonID`, `exerciseID`, `type`, `answer`, `result`, `levumi_math_category`, `levumi_correctly_answered_percent`, `levumi_reading_*`, `has_merged_data` | `correctly_answered_percent` wird im Browser berechnet |
+
+**Offene Punkte dazu:** Liegt eine Zeile je Test oder je Aufgabe (`exerciseID`) vor? Wiederholen sich die
+`levumi_*`-Werte auf jeder Aufgabenzeile (dann nach Test zusammenfassen, nicht aufsummieren)? Was bedeutet
+`has_merged_data`? Wofür soll die **Anwesenheit** verwendet werden (z. B. Abwesenheit statt Testlücke
+kennzeichnen)? Die KPF-Auswertung (`getOutcomes`) braucht zusätzlich die Regel, wann ein Test "verbessert",
+"konstant hoch" oder "unverändert" zählt.
 
 ## Sicherheits- und Datenschutzhinweise
 

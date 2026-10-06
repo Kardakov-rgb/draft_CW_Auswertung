@@ -1,7 +1,17 @@
 /* Konfiguration lässt sich ohne Browser laden und ist in sich stimmig. */
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { APP, AXIS_TICKS, CATEGORIES, DATE_FILTER, SUBJECTS } from "../src/js/config.js";
+import {
+  APP,
+  AXIS_TICKS,
+  CATEGORIES,
+  CHILD,
+  CHILD_FIELDS,
+  CHILD_TABLE_COLUMNS,
+  DATE_FILTER,
+  SERIES,
+  SUBJECTS,
+} from "../src/js/config.js";
 
 test("APP enthält Titel, Badge und Sprache", () => {
   assert.equal(typeof APP.title, "string");
@@ -31,4 +41,13 @@ test("Achse reicht von 0 bis 100", () => {
 test("Schuljahresbeginn ist ein gültiges Datum", () => {
   const { month, day } = DATE_FILTER.schoolYearStart;
   assert.ok(month >= 1 && month <= 12 && day >= 1 && day <= 31);
+});
+
+test("Kind-Auswertung: Reihen, Felder und Tabellenspalten haben eindeutige Schlüssel", () => {
+  for (const list of [SERIES, CHILD_FIELDS, CHILD_TABLE_COLUMNS]) {
+    const keys = list.map((item) => item.key);
+    assert.equal(new Set(keys).size, keys.length);
+  }
+  assert.ok(CHILD.minTestPoints >= 1);
+  for (const series of SERIES) assert.match(series.colorToken, /^--/);
 });
