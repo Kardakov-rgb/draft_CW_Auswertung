@@ -28,7 +28,7 @@
 
   /* Diagramme (Zuordnung Linie -> Farbe steht in js/config.js als Token-Name) */
   --chart-total: var(--color-gray);
-  --chart-correct: var(--color-primary);
+  --chart-correct: var(--color-green-light);
   --chart-wrong: var(--color-orange);
 
   /* Typografie */

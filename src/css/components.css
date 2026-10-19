@@ -308,9 +308,19 @@
 
 .data-table__head--number,
 .data-table__head--percent,
+.data-table__head--level,
+.data-table__head--speed,
 .data-table__cell--number,
-.data-table__cell--percent {
+.data-table__cell--percent,
+.data-table__cell--level,
+.data-table__cell--speed {
   text-align: right;
+}
+
+.data-table__unit {
+  display: block;
+  font-weight: 400;
+  font-size: 0.65rem;
 }
 
 .data-table__link {

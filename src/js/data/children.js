@@ -11,7 +11,8 @@
          date: string,                // "JJJJ-MM-TT"
          correct: number,             // richtig beantwortete Aufgaben
          wrong: number,               // falsch beantwortete Aufgaben
-         level: number | string | null  // Niveau (levumi_level) bei diesem Test
+         level: number | string | null, // Niveaustufe (levumi_level) bei diesem Test
+         speed: number | null           // Geschwindigkeit: bearbeitete Items pro Minute, null wenn nicht erhoben
        }>
      }
    }>>
@@ -63,6 +64,8 @@ function createResults(childIndex, isLastOfKpfA) {
         correct: total - wrong,
         wrong,
         level: 1 + Math.min(4, Math.floor(testNumber / 12) + (childIndex % 2)),
+        speed:
+          8 + ((childIndex * 3 + testNumber * 7 + subjectIndex * 5) % 10) + (testNumber % 4) / 4,
       };
     });
   });

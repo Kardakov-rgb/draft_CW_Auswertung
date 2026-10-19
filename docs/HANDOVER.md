@@ -46,7 +46,7 @@ Anbindungen übernimmt der Dienstleister an den unten genannten Ersatzpunkten.
   keine Einzel-PDF je Kind. In der Liste führt der Name zur Kind-Seite.
 - **Kind-Seite:** Infoblock und je Fach ein Liniendiagramm "Entwicklung der Antwortzahlen" mit den Linien
   Gesamt, Richtig und Falsch (unterschiedliche Formen und Farben) und einer Wertetabelle (Testzeitpunkt,
-  Datum, Gesamt, Richtig, Falsch, Richtig in %). Die Tabelle ist zugleich die barrierefreie Alternative zum
+  Datum, Niveaustufe, Gesamt, Richtig, Falsch, Richtig in %, Geschwindigkeit in Items pro Minute). Die Tabelle ist zugleich die barrierefreie Alternative zum
   Diagramm. **Gesamt wird berechnet** (richtig + falsch), nicht geliefert.
 - **Mindestanzahl:** Ein Verlauf wird erst ab **3 Testzeitpunkten** je Fach gezeigt (`CHILD.minTestPoints`).
   Bei 1 oder 2 steht stattdessen ein Hinweis, bei 0 ebenfalls. Die Tests zählen trotzdem in "Anzahl Tests".
@@ -82,7 +82,7 @@ Anbindungen übernimmt der Dienstleister an den unten genannten Ersatzpunkten.
 | Ersatzpunkt (Datei und Funktion) | Demo-Variante | Produktiv-Variante | Rückgabeformat |
 | -------------------------------- | ------------- | ------------------ | -------------- |
 | `src/js/data/kpfs.js` `getKpfs()` | drei erfundene KPFs | KPFs aus der Datenbank, nach Rolle und Zuordnung der angemeldeten Person gefiltert | `Promise<Array<{ id, name }>>` |
-| `src/js/data/children.js` `getChildReports(kpfId, { from, to })` | erfundene Kinder und Testzeitpunkte im Code | Kinder der KPF mit Testzeitpunkten, aus den Rohdaten zusammengesetzt (siehe unten), Klarnamen aus der Benutzerverwaltung, nur für berechtigte Personen. Eine Abfrage für die ganze KPF, nicht je Kind. | `Promise<Array<{ child: { id, name, grade }, results: { [fach]: Array<{ testNumber, date, correct, wrong, level }> } }>>` |
+| `src/js/data/children.js` `getChildReports(kpfId, { from, to })` | erfundene Kinder und Testzeitpunkte im Code | Kinder der KPF mit Testzeitpunkten, aus den Rohdaten zusammengesetzt (siehe unten), Klarnamen aus der Benutzerverwaltung, nur für berechtigte Personen. Eine Abfrage für die ganze KPF, nicht je Kind. | `Promise<Array<{ child: { id, name, grade }, results: { [fach]: Array<{ testNumber, date, correct, wrong, level, speed }> } }>>` |
 | `src/js/services/pdfExportService.js` `exportReportPdf({ fileName })` | Druckdialog des Browsers (`window.print()`) | serverseitige PDF-Erzeugung mit diesem Layout (Startseite mit Kinderliste, Kind-Seiten in einer Datei); Datei als Download oder in neuem Tab | `Promise<void>` |
 
 Regel: Die Oberfläche bleibt unverändert, solange Signatur und Rückgabeformat der Ersatzpunkte
@@ -113,7 +113,8 @@ Beispielzeilen):
 | Richtig (`correct`) | `levumi_correctly_answered` | je Test |
 | Falsch (`wrong`) | `levumi_overall_answered` minus `levumi_correctly_answered` | Gesamt = richtig + falsch |
 | Niveau (`level`) | `levumi_level` | Bedeutung und Werte klären (Zahl oder Text) |
-| nicht verwendet | `_id`, `lessonID`, `exerciseID`, `type`, `answer`, `result`, `levumi_math_category`, `levumi_correctly_answered_percent`, `levumi_reading_*`, `has_merged_data` | `correctly_answered_percent` wird im Browser berechnet |
+| Geschwindigkeit (`speed`) | `levumi_reading_speed_in_questions_per_minute` | Bearbeitete Items pro Minute, Spalte "Geschwindigkeit (Items pro Minute)". Name der Rohdaten-Spalte sagt "reading": Gibt es den Wert auch für Mathe? Sonst `null` (Anzeige "–") |
+| nicht verwendet | `_id`, `lessonID`, `exerciseID`, `type`, `answer`, `result`, `levumi_math_category`, `levumi_correctly_answered_percent`, `levumi_reading_accuracy`, `has_merged_data` | `correctly_answered_percent` wird im Browser berechnet |
 
 **Offene Punkte dazu:** Liegt eine Zeile je Test oder je Aufgabe (`exerciseID`) vor? Wiederholen sich die
 `levumi_*`-Werte auf jeder Aufgabenzeile (dann nach Test zusammenfassen, nicht aufsummieren)? Was bedeutet
