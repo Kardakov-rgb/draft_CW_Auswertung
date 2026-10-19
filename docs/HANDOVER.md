@@ -53,6 +53,15 @@ Anbindungen übernimmt der Dienstleister an den unten genannten Ersatzpunkten.
 - Kinder ohne einen Test im Zeitraum stehen in der Liste, haben aber **keine eigene Seite**.
 - **Gleicher Zeitraum-Filter** für die ganze Sammel-PDF. Die x-Achse beschriftet die Testnummer aus den Daten
   (`testNumber`), nicht eine neue Zählung im Zeitraum.
+- **Niveauwechsel:** Kinder können die Niveaustufe wechseln. Alle Tests eines Fachs stehen trotzdem in
+  einem Diagramm (sortiert nach Datum). Aufeinanderfolgende Tests derselben Niveaustufe bilden einen
+  Abschnitt mit getöntem Hintergrund und Beschriftung ("Niveau 2"). **Zwischen zwei Abschnitten gibt es
+  keine Verbindungslinie.** Ein Test ohne Niveaustufe (`null`) bleibt unverbunden. `testNumber` beginnt
+  bei jedem Niveauwechsel wieder bei 1, deshalb heißt die Achse "Testzeitpunkt (je Niveaustufe
+  gezählt)". In der Tabelle trennt eine Linie die Niveaustufen. Die Mindestanzahl (3) zählt über alle
+  Niveaus des Fachs. In Kinderliste und Infoblock steht nach einem Wechsel "3 (zuvor 2)". Die
+  Demo-Daten wechseln das Niveau alle 7 Tests. Es wird nur auf Gleichheit verglichen, nicht gewertet
+  ("höher" ist nicht automatisch "besser").
 - **Kein automatischer Fließtext** über einzelne Kinder, nur Zahlen und Grafik. (Bitte bestätigen.)
 - Angezeigte Angaben je Kind: `CHILD_FIELDS` in `src/js/config.js` (Name, Klasse, Fächer, Anzahl Tests,
   Niveau). Tabellenspalten: `CHILD_TABLE_COLUMNS`, Linien: `SERIES`.
@@ -109,7 +118,7 @@ Beispielzeilen):
 | Klasse (`child.grade`) | `grade` | |
 | KPF-Zugehörigkeit | `kpf` | Filter je KPF |
 | Fach (Schlüssel in `SUBJECTS`) | `levumi_subject` | Zuordnung der Werte zu `math`/`german` klären |
-| Testzeitpunkt (`testNumber`, `date`) | `testNumber`, `date` | Zählt `testNumber` je Kind und Fach oder je Schuljahr? |
+| Testzeitpunkt (`testNumber`, `date`) | `testNumber`, `date` | Beginnt laut Fachseite bei jedem Niveauwechsel wieder bei 1. Zählt sie sonst je Kind und Fach oder je Schuljahr? Die Reihenfolge im Diagramm kommt aus `date`. |
 | Richtig (`correct`) | `levumi_correctly_answered` | je Test |
 | Falsch (`wrong`) | `levumi_overall_answered` minus `levumi_correctly_answered` | Gesamt = richtig + falsch |
 | Niveau (`level`) | `levumi_level` | Bedeutung und Werte klären (Zahl oder Text) |

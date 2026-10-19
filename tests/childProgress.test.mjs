@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { summarizeChild, summarizeSubject } from "../src/js/domain/childProgress.js";
+import { levelSegments, summarizeChild, summarizeSubject } from "../src/js/domain/childProgress.js";
 
 const SUBJECTS = [
   { key: "math", label: "Mathe" },
@@ -94,4 +94,52 @@ test("summarizeSubject: Niveaustufe und Geschwindigkeit je Zeile, fehlende Werte
   assert.equal(summary.rows[0].speed, 12.5);
   assert.equal(summary.rows[1].level, null);
   assert.equal(summary.rows[1].speed, null);
+});
+
+test("levelSegments: Wechsel trennt Abschnitte, fehlendes Niveau steht für sich", () => {
+  const rows = [
+    { level: 2 },
+    { level: 2 },
+    { level: 3 },
+    { level: null },
+    { level: null },
+    { level: 3 },
+  ];
+  assert.deepEqual(levelSegments(rows), [
+    { level: 2, from: 0, to: 1 },
+    { level: 3, from: 2, to: 2 },
+    { level: null, from: 3, to: 3 },
+    { level: null, from: 4, to: 4 },
+    { level: 3, from: 5, to: 5 },
+  ]);
+  assert.deepEqual(levelSegments([]), []);
+});
+
+test("summarizeSubject: Niveauwechsel, Testnummer darf neu beginnen, vorheriges Niveau", () => {
+  const point = (testNumber, date, level) => ({ testNumber, date, correct: 5, wrong: 1, level });
+  const summary = summarizeSubject(
+    [
+      point(1, "2026-09-01", 2),
+      point(2, "2026-09-15", 2),
+      point(1, "2026-09-29", 3),
+      point(2, "2026-10-13", 3),
+    ],
+    3,
+  );
+  assert.equal(summary.segments.length, 2);
+  assert.deepEqual(
+    summary.rows.map((row) => row.levelStart),
+    [false, false, true, false],
+  );
+  assert.equal(summary.level, 3);
+  assert.equal(summary.previousLevel, 2);
+  assert.equal(summary.showChart, true);
+});
+
+test("summarizeSubject: ohne Wechsel kein vorheriges Niveau", () => {
+  const summary = summarizeSubject(
+    [{ testNumber: 1, date: "2026-09-01", correct: 1, wrong: 0, level: 4 }],
+    3,
+  );
+  assert.equal(summary.previousLevel, null);
 });

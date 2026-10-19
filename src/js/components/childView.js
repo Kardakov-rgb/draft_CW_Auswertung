@@ -113,7 +113,14 @@ function createChildPage({ kpf, period, summary, locale }) {
     const section = el("section", "child-section");
     section.setAttribute("aria-label", subject.label);
     if (subject.showChart) {
-      section.append(createLineChart({ subjectLabel: subject.label, rows: subject.rows, locale }));
+      section.append(
+        createLineChart({
+          subjectLabel: subject.label,
+          rows: subject.rows,
+          segments: subject.segments,
+          locale,
+        }),
+      );
     } else {
       section.append(el("h3", "report__subject", subject.label));
       const message =

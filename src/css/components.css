@@ -192,7 +192,7 @@
 }
 
 .intro-card {
-  padding: var(--space-3) var(--space-4);
+  padding: var(--space-2) var(--space-4);
   border-radius: 1.25rem 0 1.25rem 0;
   background: var(--color-bg-subtle);
 }
@@ -323,6 +323,10 @@
   font-size: 0.65rem;
 }
 
+.data-table__row--level-start .data-table__cell {
+  border-top: 2px solid var(--color-primary);
+}
+
 .data-table__link {
   font-weight: 600;
 }
@@ -406,6 +410,22 @@
 
 .line-chart__label--x,
 .line-chart__title {
+  text-anchor: middle;
+}
+
+.line-chart__band {
+  fill: transparent;
+}
+
+.line-chart__band--shaded {
+  fill: var(--color-bg-subtle);
+}
+
+.line-chart__band-label {
+  fill: var(--color-primary);
+  font-family: var(--font-sans);
+  font-size: 10px;
+  font-weight: 700;
   text-anchor: middle;
 }
 
