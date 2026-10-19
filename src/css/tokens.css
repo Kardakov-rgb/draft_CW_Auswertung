@@ -26,14 +26,10 @@
   --color-on-gray: #ffffff;
   --color-on-accent: #1a1a1a;
 
-  /* Diagramme (Zuordnung Kategorie -> Farbe steht in js/config.js als Token-Name) */
-  --chart-improved: var(--color-accent);
-  --chart-stable: var(--color-primary);
-  --chart-unchanged: var(--color-gray);
+  /* Diagramme (Zuordnung Linie -> Farbe steht in js/config.js als Token-Name) */
   --chart-total: var(--color-gray);
   --chart-correct: var(--color-primary);
   --chart-wrong: var(--color-orange);
-  --chart-bar-height: 5.5rem;
 
   /* Typografie */
   --font-sans: "Montserrat", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;

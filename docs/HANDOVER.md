@@ -6,21 +6,22 @@ Entwurf einer Seite, die der Dienstleister in das bestehende System übernimmt. 
 Produktivanwendung**: Alle Daten sind erfunden, Anmeldung und Datenbank fehlen bewusst.
 Anbindungen übernimmt der Dienstleister an den unten genannten Ersatzpunkten.
 
-**Stand:** Auswertung pro KPF (Funktion 1), Zeitraum-Filter, Kinderliste und Auswertung pro Kind mit einer Sammel-PDF (Funktion 2). Weitere folgen.
+**Stand:** Startseite mit Einleitung, QR-Code und Kinderliste pro KPF, Zeitraum-Filter, Auswertung pro Kind, alles in einer Sammel-PDF. Weitere folgen.
 
 - Organisation / Bereich: _noch zu ergänzen_
 - Ziel der Seite (ein Satz): _noch zu ergänzen_
 
 ## Funktionen
 
-### 1. Auswertung der CHANCENkurve pro KPF mit PDF-Export
+### 1. Startseite und PDF-Export pro KPF
 
-- Die Person wählt eine **KPF** (Auswertung erfolgt pro KPF). Die Seite zeigt eine A4-Berichtsseite:
-  Titel, KPF-Name, Zeitraum, Einleitung, je Fach (Mathe, Deutsch) ein **Balkendiagramm** und
-  ein Erklärtext. Das Diagramm wechselt je Fach die Seite (links/rechts), wie im Design.
-- Balken: Anteil der **Testungen** je Kategorie (Verbessert, Konstant auf hohem Niveau, Unverändert).
-  Die **Erfolgsquote** im Text (Verbessert + Konstant hoch) wird aus denselben Zahlen berechnet wie der
-  Balken (`domain/outcomes.js`), nicht von Hand gepflegt. Gezählt werden Testungen, nicht Kinder.
+- Die Person wählt eine **KPF**. Die erste A4-Seite zeigt Titel, KPF-Name, Zeitraum, zwei feste
+  Einleitungstexte (Verein, CHANCENkurve) und einen **QR-Code** zur Website `https://www.chancenwerk.de`
+  (URL steht zusätzlich als Text darunter), danach ohne eigene Überschrift die **Kinderliste**.
+  Die Texte stehen in `REPORT.introTexts` (`src/js/config.js`), der QR-Code ist ein statisches SVG
+  (`src/assets/images/qr-chancenwerk.svg`) und muss bei geänderter URL neu erzeugt werden.
+  Die frühere Gruppenauswertung (Balkendiagramme je Fach) wurde entfernt.
+  Der Text "an dieser Schule" ist für KPFs mit mehreren Schulen ggf. fachlich zu prüfen.
 - "Als PDF speichern" öffnet in der Demo den Druckdialog des Browsers. Der Seitentitel entspricht dem
   vorgesehenen Dateinamen `CKurve_<KPF-Name>_<von JJJJMMTT>-<bis JJJJMMTT>.pdf` (Umlaute und
   Sonderzeichen bereinigt). Das Datum im Namen ist der ausgewertete Zeitraum, nicht das Erstellungsdatum.
@@ -31,13 +32,8 @@ Anbindungen übernimmt der Dienstleister an den unten genannten Ersatzpunkten.
   dann gesperrt. "Bis" und "Von" können nicht in der Zukunft liegen. Schuljahresbeginn: `DATE_FILTER`
   in `src/js/config.js`. "Heute" ist das Datum im Browser der Person, nicht des Servers: Der
   Dienstleister prüft, ob die Datenbank denselben Tag (Zeitzone) verwendet.
-- Hat eine KPF im Zeitraum keine Daten, zeigt die Seite einen Hinweis und der Export ist deaktiviert (Tooltip).
-- Fächer, Kategorien, Farben (als Token-Namen), Texte und Dateinamen-Präfix stehen in `src/js/config.js`.
-- **Bewusst offen / Entscheidung des Auftraggebers:** keine Mindestanzahl (n) für die Anzeige. Bei
-  kleinen Gruppen sind Prozentwerte wenig aussagekräftig und können Einzelne erkennbar machen:
-  Datenschutz mit dem Dienstleister klären. Ein Status "Zwischenstand/Final" ist nicht vorgesehen.
-  Die Aussage "Ergebnisse zeigen ..." beschreibt Entwicklungen, keine nachgewiesene Wirkung
-  (keine Vergleichsgruppe): Formulierung fachlich prüfen.
+- Hat eine KPF im Zeitraum keine Kinder mit Tests, ist der Export deaktiviert (Tooltip).
+- Fächer, Farben (als Token-Namen), Texte und Dateinamen-Präfix stehen in `src/js/config.js`.
 - **Rollen:** Schulteambegleitung und Ansprechperson sehen nur die KPFs ihrer Zuordnung. Die Demo
   hat keine Anmeldung; `getKpfs()` liefert in der Produktivversion nur erlaubte KPFs.
 - **Platzhalter im Layout:** Logo und Fußzeile (Name, Anschrift, Kontakt) übernimmt der Dienstleister
@@ -45,7 +41,7 @@ Anbindungen übernimmt der Dienstleister an den unten genannten Ersatzpunkten.
 
 ### 2. Kinderliste und Auswertung pro Kind (Sammel-PDF)
 
-- Hinter dem KPF-Bericht folgt eine **Kinderliste** (Name, Klasse, Fächer, Anzahl Tests, Niveau) und
+- Auf der Startseite steht die **Kinderliste** (Name, Klasse, Fächer, Anzahl Tests, Niveau) und
   danach **eine Seite je Kind**. Alles zusammen ist **eine einzige PDF** ("Als PDF speichern"). Es gibt
   keine Einzel-PDF je Kind. In der Liste führt der Name zur Kind-Seite.
 - **Kind-Seite:** Infoblock und je Fach ein Liniendiagramm "Entwicklung der Antwortzahlen" mit den Linien
@@ -55,7 +51,7 @@ Anbindungen übernimmt der Dienstleister an den unten genannten Ersatzpunkten.
 - **Mindestanzahl:** Ein Verlauf wird erst ab **3 Testzeitpunkten** je Fach gezeigt (`CHILD.minTestPoints`).
   Bei 1 oder 2 steht stattdessen ein Hinweis, bei 0 ebenfalls. Die Tests zählen trotzdem in "Anzahl Tests".
 - Kinder ohne einen Test im Zeitraum stehen in der Liste, haben aber **keine eigene Seite**.
-- **Gleicher Zeitraum-Filter** wie beim KPF-Bericht. Die x-Achse beschriftet die Testnummer aus den Daten
+- **Gleicher Zeitraum-Filter** für die ganze Sammel-PDF. Die x-Achse beschriftet die Testnummer aus den Daten
   (`testNumber`), nicht eine neue Zählung im Zeitraum.
 - **Kein automatischer Fließtext** über einzelne Kinder, nur Zahlen und Grafik. (Bitte bestätigen.)
 - Angezeigte Angaben je Kind: `CHILD_FIELDS` in `src/js/config.js` (Name, Klasse, Fächer, Anzahl Tests,
@@ -86,17 +82,16 @@ Anbindungen übernimmt der Dienstleister an den unten genannten Ersatzpunkten.
 | Ersatzpunkt (Datei und Funktion) | Demo-Variante | Produktiv-Variante | Rückgabeformat |
 | -------------------------------- | ------------- | ------------------ | -------------- |
 | `src/js/data/kpfs.js` `getKpfs()` | drei erfundene KPFs | KPFs aus der Datenbank, nach Rolle und Zuordnung der angemeldeten Person gefiltert | `Promise<Array<{ id, name }>>` |
-| `src/js/data/outcomes.js` `getOutcomes(kpfId, { from, to })` | erfundene Testungen mit Datum, im Code erzeugt und nach Zeitraum gefiltert | Anzahl der Testungen je Fach und Kategorie, Testdatum zwischen `from` und `to` (beide inklusive), direkt in der Datenbank aggregiert (Berechtigung prüfen) | `Promise<{ kpfId, period: { from, to }, results: { [fach]: { [kategorie]: Zahl } } }>` (Daten als `JJJJ-MM-TT`) |
 | `src/js/data/children.js` `getChildReports(kpfId, { from, to })` | erfundene Kinder und Testzeitpunkte im Code | Kinder der KPF mit Testzeitpunkten, aus den Rohdaten zusammengesetzt (siehe unten), Klarnamen aus der Benutzerverwaltung, nur für berechtigte Personen. Eine Abfrage für die ganze KPF, nicht je Kind. | `Promise<Array<{ child: { id, name, grade }, results: { [fach]: Array<{ testNumber, date, correct, wrong, level }> } }>>` |
-| `src/js/services/pdfExportService.js` `exportReportPdf({ fileName })` | Druckdialog des Browsers (`window.print()`) | serverseitige PDF-Erzeugung mit diesem Layout (KPF-Bericht, Kinderliste, Kind-Seiten in einer Datei); Datei als Download oder in neuem Tab | `Promise<void>` |
+| `src/js/services/pdfExportService.js` `exportReportPdf({ fileName })` | Druckdialog des Browsers (`window.print()`) | serverseitige PDF-Erzeugung mit diesem Layout (Startseite mit Kinderliste, Kind-Seiten in einer Datei); Datei als Download oder in neuem Tab | `Promise<void>` |
 
 Regel: Die Oberfläche bleibt unverändert, solange Signatur und Rückgabeformat der Ersatzpunkte
 erhalten bleiben.
 
 ## Von den Rohdaten zur Auswertung
 
-Die Testdaten liegen als Rohdaten vor und müssen zu den Zahlen für `getChildReports()` und
-`getOutcomes()` zusammengesetzt werden. Das ist eine **eigene Aufgabe für den Dienstleister**
+Die Testdaten liegen als Rohdaten vor und müssen zu den Zahlen für `getChildReports()`
+zusammengesetzt werden. Das ist eine **eigene Aufgabe für den Dienstleister**
 (Aggregation in der Datenbank oder im Server, nicht im Browser). Die Demo zeigt nur das Ergebnis.
 
 Bekannte Spalten der Rohdaten: `_id; userID; lessonID; exerciseID; testNumber; date; kpf; grade; type;
@@ -123,8 +118,7 @@ Beispielzeilen):
 **Offene Punkte dazu:** Liegt eine Zeile je Test oder je Aufgabe (`exerciseID`) vor? Wiederholen sich die
 `levumi_*`-Werte auf jeder Aufgabenzeile (dann nach Test zusammenfassen, nicht aufsummieren)? Was bedeutet
 `has_merged_data`? Wofür soll die **Anwesenheit** verwendet werden (z. B. Abwesenheit statt Testlücke
-kennzeichnen)? Die KPF-Auswertung (`getOutcomes`) braucht zusätzlich die Regel, wann ein Test "verbessert",
-"konstant hoch" oder "unverändert" zählt.
+kennzeichnen)? 
 
 ## Sicherheits- und Datenschutzhinweise
 

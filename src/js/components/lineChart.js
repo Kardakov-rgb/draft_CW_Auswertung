@@ -2,7 +2,7 @@
    Reihen: SERIES, Tabellenspalten: CHILD_TABLE_COLUMNS (beides in config.js). */
 import { CHILD, CHILD_TABLE_COLUMNS, SERIES } from "../config.js";
 import { formatIsoDate } from "../domain/dateRange.js";
-import { formatPercent, fillTemplate } from "../domain/outcomes.js";
+import { formatPercent, fillTemplate } from "../domain/text.js";
 import { labelStep, niceTicks, pointPosition } from "../domain/scale.js";
 import { el } from "./reportParts.js";
 
