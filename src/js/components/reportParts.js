@@ -25,7 +25,10 @@ export function createReportHeader({ title, meta }) {
   const header = el("header", "report__header");
   const heading = el("div");
   heading.append(el("h2", "report__title", title), el("p", "report__meta", meta));
-  header.append(heading, el("div", "report__logo", REPORT.logoPlaceholder));
+  const logo = el("img", "report__logo");
+  logo.src = REPORT.logo.src;
+  logo.alt = REPORT.logo.alt;
+  header.append(heading, logo);
   return header;
 }
 

@@ -170,10 +170,12 @@
 }
 
 .report__logo {
-  padding: var(--space-2) var(--space-3);
-  border: 1px dashed var(--color-border);
-  font-family: var(--font-sans);
-  font-size: var(--font-size-small);
+  flex: none;
+  display: block;
+  width: 36mm;
+  height: auto;
+  padding: var(--space-2);
+  background: var(--color-primary);
 }
 
 .intro {
@@ -192,7 +194,7 @@
 
 .intro-card {
   padding: var(--space-3) var(--space-4);
-  border-left: 0.35rem solid var(--color-accent);
+  border-radius: 1.25rem 0 1.25rem 0;
   background: var(--color-bg-subtle);
 }
 
