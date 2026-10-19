@@ -96,12 +96,15 @@ export const CHILD_FIELDS = [
   { key: "level", label: "Niveau (Levumi)", type: "level" },
 ];
 
-/* Spalten der Wertetabelle unter dem Diagramm. type: number | date | percent */
+/* Spalten der Wertetabelle unter dem Diagramm. type: number | date | percent | level | speed
+   unit (optional): zweite Zeile in der Spaltenüberschrift, z. B. die Einheit. */
 export const CHILD_TABLE_COLUMNS = [
   { key: "testNumber", label: "Testzeitpunkt", type: "number" },
   { key: "date", label: "Datum", type: "date" },
+  { key: "level", label: "Niveaustufe", type: "level" },
   { key: "total", label: "Gesamt", type: "number" },
   { key: "correct", label: "Richtig", type: "number" },
   { key: "wrong", label: "Falsch", type: "number" },
   { key: "correctShare", label: "Richtig in %", type: "percent" },
+  { key: "speed", label: "Geschwindigkeit", unit: "Items pro Minute", type: "speed" },
 ];

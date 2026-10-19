@@ -150,8 +150,16 @@ function createPlot({ rows, title, description }) {
 }
 
 function formatCell(column, value, locale) {
+  if (value === null || value === undefined) return CHILD.noValue;
   if (column.type === "date") return formatIsoDate(value, locale);
   if (column.type === "percent") return formatPercent(value, locale);
+  if (column.type === "level") return String(value);
+  if (column.type === "speed") {
+    return new Intl.NumberFormat(locale, {
+      minimumFractionDigits: 1,
+      maximumFractionDigits: 1,
+    }).format(value);
+  }
   return new Intl.NumberFormat(locale).format(value);
 }
 
@@ -161,6 +169,7 @@ function createTable({ rows, caption, locale }) {
   const head = el("tr");
   for (const column of CHILD_TABLE_COLUMNS) {
     const cell = el("th", `data-table__head data-table__head--${column.type}`, column.label);
+    if (column.unit) cell.append(el("span", "data-table__unit", column.unit));
     cell.scope = "col";
     head.append(cell);
   }

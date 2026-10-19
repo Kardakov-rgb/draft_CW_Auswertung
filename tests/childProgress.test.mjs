@@ -81,3 +81,17 @@ test("summarizeChild: zählt Tests über alle Fächer, Kind ohne Test hat keine 
   assert.equal(without.testCount, 0);
   assert.equal(without.hasData, false);
 });
+
+test("summarizeSubject: Niveaustufe und Geschwindigkeit je Zeile, fehlende Werte werden null", () => {
+  const summary = summarizeSubject(
+    [
+      { testNumber: 1, date: "2026-09-01", correct: 4, wrong: 2, level: 2, speed: 12.5 },
+      { testNumber: 2, date: "2026-09-10", correct: 5, wrong: 1 },
+    ],
+    3,
+  );
+  assert.equal(summary.rows[0].level, 2);
+  assert.equal(summary.rows[0].speed, 12.5);
+  assert.equal(summary.rows[1].level, null);
+  assert.equal(summary.rows[1].speed, null);
+});

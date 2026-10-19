@@ -1,6 +1,7 @@
 /* Fachlogik der Kind-Auswertung (ohne DOM): Testzeitpunkte -> Verlauf, Quote, Kennzahlen. */
 
-/* points: [{ testNumber, date: "JJJJ-MM-TT", correct, wrong, level }]
+/* points: [{ testNumber, date: "JJJJ-MM-TT", correct, wrong, level, speed }]
+   speed: bearbeitete Items pro Minute (Zahl) oder null, wenn nicht erhoben.
    Rückgabe: Zeilen sortiert nach Datum (dann Testnummer), Anzahl, aktuelles Niveau und ob ein
    Verlauf gezeigt wird (ab minPoints Testzeitpunkten). Gesamt = richtig + falsch. */
 export function summarizeSubject(points, minPoints) {
@@ -17,6 +18,8 @@ export function summarizeSubject(points, minPoints) {
       correct,
       wrong,
       total,
+      level: point.level ?? null,
+      speed: Number.isFinite(point.speed) ? point.speed : null,
       correctShare: total === 0 ? 0 : (correct / total) * 100,
     };
   });
