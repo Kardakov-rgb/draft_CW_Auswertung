@@ -3,6 +3,11 @@ import { CHILD } from "../config.js";
 
 const withData = (summary) => summary.subjects.filter((subject) => subject.testCount > 0);
 
+const levelText = (subject) =>
+  subject.previousLevel === null
+    ? String(subject.level)
+    : `${subject.level} (${CHILD.previousLevelHint} ${subject.previousLevel})`;
+
 const RENDERERS = {
   text: (summary, field) => summary[field.key] || CHILD.noValue,
   subjects: (summary) => {
@@ -19,7 +24,7 @@ const RENDERERS = {
   level: (summary) => {
     const parts = withData(summary).filter((subject) => subject.level !== null);
     return parts.length > 0
-      ? parts.map((subject) => `${subject.label}: ${subject.level}`).join(", ")
+      ? parts.map((subject) => `${subject.label}: ${levelText(subject)}`).join(", ")
       : CHILD.noValue;
   },
 };

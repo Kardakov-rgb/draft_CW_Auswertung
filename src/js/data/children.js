@@ -7,7 +7,7 @@
      child: { id: string, name: string, grade: string },
      results: {                       // je Fach (Schlüssel wie SUBJECTS in js/config.js)
        [subjectKey]: Array<{          // ein Eintrag je Testzeitpunkt im Zeitraum
-         testNumber: number,
+         testNumber: number,          // beginnt bei jedem Niveauwechsel wieder bei 1
          date: string,                // "JJJJ-MM-TT"
          correct: number,             // richtig beantwortete Aufgaben
          wrong: number,               // falsch beantwortete Aufgaben
@@ -53,8 +53,13 @@ function createResults(childIndex, isLastOfKpfA) {
   DEMO_SUBJECTS.forEach((subject, subjectIndex) => {
     if (childIndex % 4 === 3 && subject === "german") return;
     const startOffset = childIndex === 5 ? 400 : 0;
+    /* Niveaustufe wechselt alle 7 Tests (je Kind versetzt, höchstens Stufe 5). Die Testnummer
+       beginnt bei jedem Niveauwechsel wieder bei 1. */
+    const levelOf = (i) => 1 + Math.min(4, Math.floor((i + childIndex * 2) / 7));
     results[subject] = Array.from({ length: DEMO_TESTS }, (_, i) => {
-      const testNumber = i + 1;
+      const level = levelOf(i);
+      let testNumber = 1;
+      while (i - testNumber >= 0 && levelOf(i - testNumber) === level) testNumber += 1;
       const day = startOffset + i * 14 + childIndex * 2 + subjectIndex * 3;
       const total = 30 + ((childIndex * 7 + testNumber * 5 + subjectIndex * 3) % 14);
       const wrong = (childIndex + testNumber * 3 + subjectIndex) % 5;
@@ -63,7 +68,7 @@ function createResults(childIndex, isLastOfKpfA) {
         date: new Date(DEMO_START + day * DAY).toISOString().slice(0, 10),
         correct: total - wrong,
         wrong,
-        level: 1 + Math.min(4, Math.floor(testNumber / 12) + (childIndex % 2)),
+        level,
         speed:
           8 + ((childIndex * 3 + testNumber * 7 + subjectIndex * 5) % 10) + (testNumber % 4) / 4,
       };

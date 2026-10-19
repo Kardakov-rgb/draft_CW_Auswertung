@@ -75,7 +75,12 @@ export const CHILD = {
   maxXLabels: 12,
   pageTitle: "Auswertung",
   chartTitle: "Entwicklung der Antwortzahlen ({subject})",
-  xAxisTitle: "Testzeitpunkt",
+  xAxisTitle: "Testzeitpunkt (je Niveaustufe gezählt)",
+  /* Beschriftung der Niveau-Bereiche im Diagramm; die kurze Form gilt bei schmalen Bereichen. */
+  levelLabel: "Niveau {level}",
+  levelLabelShort: "N{level}",
+  /* Zusatz in Kinderliste und Infoblock nach einem Wechsel, z. B. "3 (zuvor 2)". */
+  previousLevelHint: "zuvor",
   yAxisTitle: "Anzahl Aufgaben",
   tableCaption: "Werte je Testzeitpunkt ({subject})",
   tooFewMessage:
