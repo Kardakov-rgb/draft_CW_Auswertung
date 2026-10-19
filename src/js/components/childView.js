@@ -1,6 +1,6 @@
-/* Kinderliste und eine Seite je Kind (A4, Teil der Sammel-PDF). Liefert die Seiten als Liste. */
+/* Erste Seite (Einleitung, QR-Code, Kinderliste) und eine Seite je Kind (A4, Teil der Sammel-PDF). */
 import { CHILD, CHILD_FIELDS, REPORT } from "../config.js";
-import { fillTemplate } from "../domain/outcomes.js";
+import { fillTemplate } from "../domain/text.js";
 import { formatChildField } from "./childFields.js";
 import { createLegend, createLineChart } from "./lineChart.js";
 import {
@@ -13,10 +13,24 @@ import {
 
 const pageId = (child) => `seite-${child.id}`;
 
-function createList({ kpf, period, summaries, locale }) {
-  const page = createPage(CHILD.listTitle);
+function createIntro() {
+  const { url, qrImage } = REPORT.website;
+  const intro = el("div", "intro");
+  const text = el("div", "intro__text");
+  text.append(...REPORT.introTexts.map((paragraph) => el("p", "", paragraph)));
+  const qr = el("figure", "intro__qr");
+  const image = el("img", "intro__qr-image");
+  image.src = qrImage;
+  image.alt = REPORT.qrAlt;
+  qr.append(image, el("figcaption", "", url));
+  intro.append(text, qr);
+  return intro;
+}
+
+function createStartPage({ kpf, period, summaries, locale }) {
+  const page = createPage(REPORT.title);
   const header = createReportHeader({
-    title: CHILD.listTitle,
+    title: REPORT.title,
     meta: `${REPORT.scopeLabel}: ${kpf.name} · ${periodText(period, locale)}`,
   });
   const table = el("table", "data-table");
@@ -47,7 +61,10 @@ function createList({ kpf, period, summaries, locale }) {
     body.append(row);
   }
   table.append(body);
-  page.append(header, el("p", "report__intro", CHILD.listIntro), table, createReportFooter());
+  page.append(header, createIntro());
+  if (summaries.length === 0) page.append(el("p", "", CHILD.emptyListMessage));
+  else page.append(table);
+  page.append(createReportFooter());
   return page;
 }
 
@@ -93,11 +110,10 @@ function createChildPage({ kpf, period, summary, locale }) {
   return page;
 }
 
-/* summaries: Ergebnis von summarizeChild je Kind. Ohne Kinder: keine Seiten. */
+/* summaries: Ergebnis von summarizeChild je Kind. Die erste Seite gibt es immer. */
 export function renderChildPages({ kpf, period, summaries, locale }) {
-  if (summaries.length === 0) return [];
   return [
-    createList({ kpf, period, summaries, locale }),
+    createStartPage({ kpf, period, summaries, locale }),
     ...summaries
       .filter((summary) => summary.hasData)
       .map((summary) => createChildPage({ kpf, period, summary, locale })),

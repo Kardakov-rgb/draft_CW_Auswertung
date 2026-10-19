@@ -9,70 +9,28 @@ export const APP = {
   locale: "de-DE",
 };
 
-/* Kategorien der Auswertung, in dieser Reihenfolge (links nach rechts im Balken).
-   key:         Schlüssel in den gelieferten Zahlen (siehe data/outcomes.js)
-   label:       Beschriftung in der Legende
-   success:     zählt zur Erfolgsquote (Summe der success-Kategorien / alle Testungen)
-   colorToken:  Farbe des Segments (Token aus tokens.css)
-   textToken:   Textfarbe im Segment (Token aus tokens.css)
-   Neue Kategorie = Eintrag hier + Wert in den Daten, kein Eingriff im Code. */
-export const CATEGORIES = [
-  {
-    key: "improved",
-    label: "Verbessert (Klasse aufgestiegen)",
-    success: true,
-    colorToken: "--chart-improved",
-    textToken: "--color-on-accent",
-  },
-  {
-    key: "stable",
-    label: "Konstant auf hohem Niveau (≥ 80 %)",
-    success: true,
-    colorToken: "--chart-stable",
-    textToken: "--color-on-primary",
-  },
-  {
-    key: "unchanged",
-    label: "Unverändert in Ausgangsklasse",
-    success: false,
-    colorToken: "--chart-unchanged",
-    textToken: "--color-on-gray",
-  },
-];
-
-/* Fächer, in dieser Reihenfolge (Berichtsseite wechselt Diagramm links/rechts).
-   Schlüssel = Schlüssel in den gelieferten Daten.
-   text: Erklärtext, {share} wird durch die berechnete Erfolgsquote ersetzt. */
+/* Fächer, in dieser Reihenfolge. Schlüssel = Schlüssel in den gelieferten Daten. */
 export const SUBJECTS = [
-  {
-    key: "math",
-    label: "Mathe",
-    chartTitle: "Gesamterfolgsquote der Förderung (Mathematik)",
-    text: "Durch die kontinuierliche Begleitung schließen die Schüler:innen grundlegende Verständnislücken in den Grundrechenarten. Die Ergebnisse zeigen: {share} der Testungen zeigen eine verbesserte Niveaustufe oder ein dauerhaft hohes Leistungsniveau (≥ 80 %).",
-  },
-  {
-    key: "german",
-    label: "Deutsch",
-    chartTitle: "Gesamterfolgsquote der Förderung (Deutsch)",
-    text: "In den Übungseinheiten werden Leseverständnis, Wortschatz und Grammatik gestärkt. {share} der Testungen zeigen nachhaltige Lernfortschritte oder ein stabil hohes Kompetenzniveau.",
-  },
+  { key: "math", label: "Mathe" },
+  { key: "german", label: "Deutsch" },
 ];
 
-/* Texte der Berichtsseite. */
+/* Texte der ersten Seite. */
 export const REPORT = {
   title: "Ergebnisse der CHANCENkurve",
-  intro:
-    "Die CHANCENkurve ist eine datengestützte Lernverlaufsdiagnostik zur Erfassung des individuellen Lernfortschritts. Sie wird in der Regel alle 4 bis 6 Wochen direkt im Rahmen der Lernförderung durchgeführt.",
+  /* Zwei Absätze über dem QR-Code-Block; der QR-Code führt zur Website des Vereins. */
+  introTexts: [
+    "Chancenwerk e.V. möchte die Chancen auf einen gerechteren Bildungserfolg von Kindern und Jugendlichen unabhängig von ihrer sozioökonomischen Herkunft erhöhen. Daher unterstützen wir Schüler:innen beim Lernen in ihrer Schule oder digital zu Hause, deren Erziehungsberechtigte ihnen aus zeitlichen, sprachlichen oder finanziellen Gründen nicht helfen können. Mehr Informationen über unseren Verein, unsere Angebote und unsere Wirkung finden Sie auf unserer Website:",
+    "Die CHANCENkurve ist unser Instrument zur Lernverlaufsdiagnostik. Sie basiert auf den Levumi-Tests und macht den individuellen Lernfortschritt sichtbar. Im Rahmen der Lernförderung an dieser Schule findet sie in der Regel alle vier bis sechs Wochen statt. Im Mittelpunkt stehen grundlegende Kompetenzen in Mathematik und Deutsch. So erkennen wir früh, wo noch Basiswissen fehlt, und können genau dort ansetzen.",
+  ],
+  website: { url: "https://www.chancenwerk.de", qrImage: "assets/images/qr-chancenwerk.svg" },
+  qrAlt: "QR-Code zur Website von Chancenwerk e.V.",
   scopeLabel: "KPF",
   periodLabel: "Zeitraum",
   /* Platzhalter: Logo und Fußzeile übernimmt der Dienstleister aus dem Corporate-Design-Template. */
   logoPlaceholder: "Logo",
   footer: "Platzhalter für Fußzeile (Name, Anschrift, Kontakt der Organisation)",
-  emptyMessage: "Für diese KPF liegen im gewählten Zeitraum keine Auswertungsdaten vor.",
 };
-
-/* Achsenbeschriftung des Balkens in Prozent. */
-export const AXIS_TICKS = [0, 20, 40, 60, 80, 100];
 
 /* Zeitraum-Filter. Standard: Beginn des laufenden Schuljahres bis heute.
    schoolYearStart: Monat (1-12) und Tag, an dem das Schuljahr beginnt (hier 01.08.). */
@@ -103,9 +61,6 @@ export const CHILD = {
   /* Höchstzahl beschrifteter Testzeitpunkte auf der x-Achse, sonst wird ausgedünnt. */
   maxXLabels: 12,
   pageTitle: "Auswertung",
-  listTitle: "Kinderliste",
-  listIntro:
-    "Alle Kinder dieser KPF im gewählten Zeitraum. Kinder ohne Test haben keine eigene Seite.",
   chartTitle: "Entwicklung der Antwortzahlen ({subject})",
   xAxisTitle: "Testzeitpunkt",
   yAxisTitle: "Anzahl Aufgaben",

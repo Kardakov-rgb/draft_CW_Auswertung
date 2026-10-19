@@ -3,13 +3,12 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import {
   APP,
-  AXIS_TICKS,
-  CATEGORIES,
   CHILD,
   CHILD_FIELDS,
   CHILD_TABLE_COLUMNS,
   DATE_FILTER,
   SERIES,
+  REPORT,
   SUBJECTS,
 } from "../src/js/config.js";
 
@@ -18,24 +17,15 @@ test("APP enthält Titel, Badge und Sprache", () => {
   assert.equal(APP.locale, "de-DE");
 });
 
-test("Kategorien haben eindeutige Schlüssel und Token-Namen", () => {
-  const keys = CATEGORIES.map((category) => category.key);
-  assert.equal(new Set(keys).size, keys.length);
-  for (const category of CATEGORIES) {
-    assert.match(category.colorToken, /^--/);
-    assert.match(category.textToken, /^--/);
-  }
-});
-
-test("Fächer haben eindeutige Schlüssel und einen Text mit {share}", () => {
+test("Fächer haben eindeutige Schlüssel", () => {
   const keys = SUBJECTS.map((subject) => subject.key);
   assert.equal(new Set(keys).size, keys.length);
-  for (const subject of SUBJECTS) assert.ok(subject.text.includes("{share}"));
 });
 
-test("Achse reicht von 0 bis 100", () => {
-  assert.equal(AXIS_TICKS[0], 0);
-  assert.equal(AXIS_TICKS.at(-1), 100);
+test("Erste Seite: zwei Texte und eine Website mit QR-Code", () => {
+  assert.equal(REPORT.introTexts.length, 2);
+  assert.match(REPORT.website.url, /^https:\/\//);
+  assert.match(REPORT.website.qrImage, /\.svg$/);
 });
 
 test("Schuljahresbeginn ist ein gültiges Datum", () => {

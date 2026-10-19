@@ -176,39 +176,37 @@
   font-size: var(--font-size-small);
 }
 
-.report__intro {
-  margin: 0;
-}
-
-.report__empty {
-  margin: var(--space-4) 0;
+.intro {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: start;
+  gap: var(--space-4);
   font-family: var(--font-sans);
 }
 
-.report__section {
-  display: grid;
-  grid-template-columns: 3fr 2fr;
-  align-items: start;
-  gap: var(--space-4);
-  break-inside: avoid;
+.intro__text p {
+  margin: 0 0 var(--space-3);
 }
 
-.report__section--reverse {
-  grid-template-columns: 2fr 3fr;
+.intro__qr {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
+  margin: 0;
+  font-size: 0.75rem;
 }
 
-.report__section--reverse .bar-chart {
-  order: 2;
+.intro__qr-image {
+  display: block;
+  width: 32mm;
+  height: 32mm;
 }
 
 .report__subject {
   margin: 0 0 var(--space-2);
   font-weight: 400;
   font-size: 1.75rem;
-}
-
-.report__text p {
-  margin: 0;
 }
 
 .report__footer {
@@ -220,88 +218,7 @@
   font-size: var(--font-size-small);
 }
 
-/* Balkendiagramm */
-.bar-chart {
-  margin: 0;
-  font-family: var(--font-sans);
-  font-size: var(--font-size-small);
-}
-
-.bar-chart__title {
-  margin-bottom: var(--space-2);
-  font-weight: 700;
-}
-
-.bar-chart__bar {
-  display: flex;
-  height: var(--chart-bar-height);
-  border: 1px solid var(--color-border);
-}
-
-.bar-chart__segment {
-  display: flex;
-  flex: var(--share) 1 0;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-width: 0;
-  overflow: hidden;
-  background: var(--segment-color);
-  color: var(--segment-text);
-  container-type: inline-size;
-  font-size: 0.75rem;
-  font-weight: 700;
-  text-align: center;
-}
-
-/* Zu schmales Segment: nur Zahl und Prozent, das Wort steht in der Überschrift des Diagramms. */
-@container (max-width: 6.5rem) {
-  .bar-chart__unit {
-    display: none;
-  }
-}
-
-.bar-chart__axis {
-  position: relative;
-  height: 1.25rem;
-}
-
-.bar-chart__tick {
-  position: absolute;
-  left: calc(var(--position) * 1%);
-  transform: translateX(-50%);
-  font-size: 0.75rem;
-}
-
-.bar-chart__axis-title {
-  margin: 0;
-  text-align: center;
-  font-size: 0.75rem;
-}
-
-.bar-chart__legend {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-1) var(--space-3);
-  margin: var(--space-2) 0 0;
-  padding: 0;
-  list-style: none;
-  font-size: 0.75rem;
-}
-
-.bar-chart__legend-item {
-  display: flex;
-  align-items: center;
-  gap: var(--space-1);
-}
-
-.bar-chart__swatch {
-  width: 0.75rem;
-  height: 0.75rem;
-  background: var(--segment-color);
-}
-
-/* Dokument: alle Seiten (KPF-Bericht, Kinderliste, Kind-Seiten) untereinander, im Druck je eine Seite */
+/* Dokument: alle Seiten (Startseite mit Kinderliste, Kind-Seiten) untereinander, im Druck je eine Seite */
 .document {
   display: flex;
   flex-direction: column;

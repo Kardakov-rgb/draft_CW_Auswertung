@@ -4,7 +4,7 @@ Statische Demo-Seite in reinem HTML, CSS und JavaScript (ES-Module), ohne Build-
 Laufzeit-Abhängigkeiten. Sie dient als Vorlage, die der IT-Dienstleister in das bestehende System
 übernimmt. Zweck, offene Fragen und Übergabehinweise: [docs/HANDOVER.md](docs/HANDOVER.md).
 
-Aktueller Stand: Auswertungsseite pro KPF mit Zeitraum-Filter und Balkendiagrammen, Kinderliste und Auswertung pro Kind (Liniendiagramme), alles in einer Sammel-PDF (Browser-Druck).
+Aktueller Stand: Startseite mit Einleitungstexten, QR-Code und Kinderliste (pro KPF, mit Zeitraum-Filter) sowie Auswertung pro Kind (Liniendiagramme), alles in einer Sammel-PDF (Browser-Druck).
 
 ## Schnellstart
 
@@ -43,12 +43,10 @@ tests/                Tests ohne Abhängigkeiten (npm test)
 docs/HANDOVER.md      Übergabe-Checkliste für den Dienstleister
 ```
 
-## Neues Fach oder neue Kategorie
+## Neues Fach
 
-1. Fach: Eintrag in `SUBJECTS` in `src/js/config.js` (`key`, `label`, `chartTitle`, `text` mit `{share}`).
-2. Kategorie: Eintrag in `CATEGORIES` (`key`, `label`, `success`, `colorToken`, `textToken`); die
-   Farb-Token legst du in `src/css/tokens.css` an.
-3. Die Zahlen dazu liefert `getOutcomes()` in `src/js/data/outcomes.js`. Im Code ist nichts zu ändern.
+Eintrag in `SUBJECTS` in `src/js/config.js` (`key`, `label`). Die Zahlen dazu liefert `getChildReports()`
+in `src/js/data/children.js`. Im Code ist nichts weiter zu ändern.
 
 ## Konventionen
 
