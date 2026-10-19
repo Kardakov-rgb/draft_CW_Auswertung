@@ -87,8 +87,9 @@ function createPlot({ rows, segments, levels, title, description }) {
     "aria-label": `${title}. ${description}`,
   });
 
-  /* Bereiche je Niveaustufe: heller Hintergrund im Diagramm, kräftiger Streifen mit Beschriftung darüber.
-     Je höher die Stufe, desto dunkler (siehe domain/levelScale.js). */
+  /* Bereiche je Niveaustufe: heller Hintergrund im Diagramm, schmaler kräftiger Streifen, Beschriftung darüber.
+     Je höher die Stufe, desto dunkler (siehe domain/levelScale.js). Die Beschriftung steht in einer
+     einheitlichen Farbe über dem Streifen. */
   const slot = rows.length > 1 ? (plotWidth - 2 * VIEW.inset) / (rows.length - 1) : plotWidth;
   const left = VIEW.left;
   const right = VIEW.width - VIEW.right;
@@ -101,7 +102,6 @@ function createPlot({ rows, segments, levels, title, description }) {
       const group = svg("g");
       group.style.setProperty("--level-strong", `var(${token})`);
       group.style.setProperty("--level-soft", `var(${token}-soft)`);
-      group.style.setProperty("--level-text", `var(${token}-text)`);
       const template = to - from >= 56 ? CHILD.levelLabel : CHILD.levelLabelShort;
       group.append(
         svg("rect", {
@@ -114,13 +114,13 @@ function createPlot({ rows, segments, levels, title, description }) {
         svg("rect", {
           class: "line-chart__strip",
           x: from,
-          y: VIEW.top - 14,
+          y: VIEW.top - 6,
           width: to - from,
-          height: 14,
+          height: 6,
         }),
         svg(
           "text",
-          { class: "line-chart__band-label", x: (from + to) / 2, y: VIEW.top - 4 },
+          { class: "line-chart__band-label", x: (from + to) / 2, y: VIEW.top - 10 },
           fillTemplate(template, { level: segment.level }),
         ),
       );
@@ -193,6 +193,10 @@ function createPlot({ rows, segments, levels, title, description }) {
     ),
   );
 
+  /* Heller Saum unter allen Linien, damit sie sich auf jedem Niveau-Hintergrund abheben. Eine eigene
+     Ebene, damit der Saum einer Linie keine andere überdeckt. */
+  const haloLayer = svg("g");
+  chart.append(haloLayer);
   for (const series of SERIES) {
     const group = svg("g");
     group.style.setProperty("--series-color", `var(${series.colorToken})`);
@@ -200,15 +204,14 @@ function createPlot({ rows, segments, levels, title, description }) {
     /* Zwischen verschiedenen Niveaustufen keine Verbindungslinie: je Abschnitt eine eigene Linie. */
     for (const segment of segments) {
       if (segment.to === segment.from) continue;
-      group.append(
-        svg("polyline", {
-          class: "line-chart__line",
-          points: points
-            .slice(segment.from, segment.to + 1)
-            .map((p) => p.join(","))
-            .join(" "),
-        }),
-      );
+      const attributes = {
+        points: points
+          .slice(segment.from, segment.to + 1)
+          .map((p) => p.join(","))
+          .join(" "),
+      };
+      haloLayer.append(svg("polyline", { ...attributes, class: "line-chart__halo" }));
+      group.append(svg("polyline", { ...attributes, class: "line-chart__line" }));
     }
     for (const [px, py] of points) group.append(marker(series.marker, px, py));
     chart.append(group);

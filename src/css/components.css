@@ -424,7 +424,7 @@
 }
 
 .line-chart__band-label {
-  fill: var(--level-text);
+  fill: var(--color-primary);
   font-family: var(--font-sans);
   font-size: 10px;
   font-weight: 700;
@@ -448,10 +448,18 @@
   stroke-linejoin: round;
 }
 
+.line-chart__halo {
+  fill: none;
+  stroke: var(--color-bg);
+  stroke-width: 6;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
 .line-chart__marker {
   fill: var(--series-color);
   stroke: var(--color-bg);
-  stroke-width: 1.5;
+  stroke-width: 2;
 }
 
 .line-chart__legend {

@@ -61,8 +61,9 @@ Anbindungen übernimmt der Dienstleister an den unten genannten Ersatzpunkten.
   gezählt)". In der Tabelle trennt eine Linie die Niveaustufen. Die Mindestanzahl (3) zählt über alle
   Niveaus des Fachs. In Kinderliste und Infoblock steht nach einem Wechsel "3 (zuvor 2)".
   **Farben:** je höher die Niveaustufe, desto dunkler (Petrol-Abstufungen `--level-*` in `tokens.css`):
-  kräftiger Beschriftungsstreifen ("Niveau 2", bei schmalen Bereichen "N2") und heller Hintergrund im
-  Diagramm, damit die Linien lesbar bleiben. Eine kleine Legende ("Niveau: niedriger … höher") steht
+  schmaler kräftiger Streifen über dem Diagramm, darüber die Beschriftung in einheitlicher Farbe
+  ("Niveau 2", bei schmalen Bereichen "N2"), und heller Hintergrund im Diagramm. Die Linien haben einen
+  weißen Saum, damit sie sich auf jedem Hintergrund abheben. Eine kleine Legende ("Niveau: niedriger … höher") steht
   neben der Legende der Linien. Die Leiter je Fach steht in `SUBJECTS[].levels` (`config.js`): Mathe 1 bis 4,
   Deutsch 2, 4, 6. Eine Stufe außerhalb der Leiter wird grau dargestellt. Die Farbstufen werden gleichmäßig
   auf die Leiter verteilt (`domain/levelScale.js`), die höchste Stufe ist immer die dunkelste.
