@@ -59,9 +59,14 @@ Anbindungen übernimmt der Dienstleister an den unten genannten Ersatzpunkten.
   keine Verbindungslinie.** Ein Test ohne Niveaustufe (`null`) bleibt unverbunden. `testNumber` beginnt
   bei jedem Niveauwechsel wieder bei 1, deshalb heißt die Achse "Testzeitpunkt (je Niveaustufe
   gezählt)". In der Tabelle trennt eine Linie die Niveaustufen. Die Mindestanzahl (3) zählt über alle
-  Niveaus des Fachs. In Kinderliste und Infoblock steht nach einem Wechsel "3 (zuvor 2)". Die
-  Demo-Daten wechseln das Niveau alle 7 Tests. Es wird nur auf Gleichheit verglichen, nicht gewertet
-  ("höher" ist nicht automatisch "besser").
+  Niveaus des Fachs. In Kinderliste und Infoblock steht nach einem Wechsel "3 (zuvor 2)".
+  **Farben:** je höher die Niveaustufe, desto dunkler (Petrol-Abstufungen `--level-*` in `tokens.css`):
+  kräftiger Beschriftungsstreifen ("Niveau 2", bei schmalen Bereichen "N2") und heller Hintergrund im
+  Diagramm, damit die Linien lesbar bleiben. Eine kleine Legende ("Niveau: niedriger … höher") steht
+  neben der Legende der Linien. Die Leiter je Fach steht in `SUBJECTS[].levels` (`config.js`): Mathe 1 bis 4,
+  Deutsch 2, 4, 6. Eine Stufe außerhalb der Leiter wird grau dargestellt. Die Farbstufen werden gleichmäßig
+  auf die Leiter verteilt (`domain/levelScale.js`), die höchste Stufe ist immer die dunkelste.
+  Die Demo-Daten steigen ab Test 26 bis 31 und dann alle 8 Tests.
 - **Kein automatischer Fließtext** über einzelne Kinder, nur Zahlen und Grafik. (Bitte bestätigen.)
 - Angezeigte Angaben je Kind: `CHILD_FIELDS` in `src/js/config.js` (Name, Klasse, Fächer, Anzahl Tests,
   Niveau). Tabellenspalten: `CHILD_TABLE_COLUMNS`, Linien: `SERIES`.

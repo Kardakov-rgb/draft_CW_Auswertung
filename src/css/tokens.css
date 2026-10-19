@@ -31,6 +31,28 @@
   --chart-correct: var(--color-green-light);
   --chart-wrong: var(--color-orange);
 
+  /* Niveaustufen im Diagramm: Petrol, je höher die Stufe desto dunkler.
+     strong = Beschriftungsstreifen, soft = Hintergrund im Diagramm (hell, damit die Linien lesbar bleiben),
+     text = Schriftfarbe auf dem Streifen. unknown = Stufe, die nicht in der Leiter des Fachs steht. */
+  --level-1: #80b1ac;
+  --level-1-soft: #ebf3f2;
+  --level-1-text: #1a1a1a;
+  --level-2: #599a93;
+  --level-2-soft: #dceae9;
+  --level-2-text: #1a1a1a;
+  --level-3: #338279;
+  --level-3-soft: #cde0de;
+  --level-3-text: #ffffff;
+  --level-4: #1a7167;
+  --level-4-soft: #bed6d3;
+  --level-4-text: #ffffff;
+  --level-5: #006359;
+  --level-5-soft: #afccc8;
+  --level-5-text: #ffffff;
+  --level-unknown: #b3b3b3;
+  --level-unknown-soft: #f0f0f0;
+  --level-unknown-text: #1a1a1a;
+
   /* Typografie */
   --font-sans: "Montserrat", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --font-serif: "Noto Serif", Georgia, "Times New Roman", serif;

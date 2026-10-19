@@ -414,19 +414,31 @@
 }
 
 .line-chart__band {
-  fill: transparent;
+  fill: var(--level-soft);
 }
 
-.line-chart__band--shaded {
-  fill: var(--color-bg-subtle);
+.line-chart__strip {
+  fill: var(--level-strong);
+  stroke: var(--color-bg);
+  stroke-width: 1;
 }
 
 .line-chart__band-label {
-  fill: var(--color-primary);
+  fill: var(--level-text);
   font-family: var(--font-sans);
   font-size: 10px;
   font-weight: 700;
   text-anchor: middle;
+}
+
+.level-scale {
+  display: inline-flex;
+}
+
+.level-scale__swatch {
+  width: 1.1rem;
+  height: 0.75rem;
+  background: var(--level-strong);
 }
 
 .line-chart__line {
@@ -445,12 +457,12 @@
 .line-chart__legend {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-1) var(--space-3);
+  gap: var(--space-1) var(--space-2);
   margin: 0;
   padding: 0;
   list-style: none;
   font-family: var(--font-sans);
-  font-size: 0.75rem;
+  font-size: 0.7rem;
 }
 
 .line-chart__legend-item {

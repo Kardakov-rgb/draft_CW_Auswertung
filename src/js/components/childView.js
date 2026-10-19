@@ -118,6 +118,7 @@ function createChildPage({ kpf, period, summary, locale }) {
           subjectLabel: subject.label,
           rows: subject.rows,
           segments: subject.segments,
+          levels: subject.levels,
           locale,
         }),
       );
