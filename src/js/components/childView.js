@@ -1,6 +1,6 @@
 /* Erste Seite (Einleitung, QR-Code, Kinderliste) und eine Seite je Kind (A4, Teil der Sammel-PDF). */
 import { CHILD, CHILD_FIELDS, REPORT } from "../config.js";
-import { fillTemplate } from "../domain/text.js";
+import { fillTemplate, parseEmphasis } from "../domain/text.js";
 import { formatChildField } from "./childFields.js";
 import { createLegend, createLineChart } from "./lineChart.js";
 import {
@@ -13,17 +13,38 @@ import {
 
 const pageId = (child) => `seite-${child.id}`;
 
-function createIntro() {
-  const { url, qrImage } = REPORT.website;
-  const intro = el("div", "intro");
-  const text = el("div", "intro__text");
-  text.append(...REPORT.introTexts.map((paragraph) => el("p", "", paragraph)));
-  const qr = el("figure", "intro__qr");
-  const image = el("img", "intro__qr-image");
+function createCard({ title, text }) {
+  const card = el("section", "intro-card");
+  const paragraph = el("p", "intro-card__text");
+  for (const part of parseEmphasis(text)) {
+    paragraph.append(part.strong ? el("strong", "", part.text) : part.text);
+  }
+  card.append(el("h3", "intro-card__title", title), paragraph);
+  return card;
+}
+
+function createQrBox() {
+  const { url, qrImage, callToAction, hint } = REPORT.website;
+  const box = el("figure", "qr-box");
+  const image = el("img", "qr-box__image");
   image.src = qrImage;
   image.alt = REPORT.qrAlt;
-  qr.append(image, el("figcaption", "", url));
-  intro.append(text, qr);
+  const caption = el("figcaption", "qr-box__caption");
+  caption.append(
+    el("strong", "qr-box__cta", callToAction),
+    el("span", "qr-box__url", url.replace(/^https?:\/\//, "")),
+    el("span", "qr-box__hint", hint),
+  );
+  box.append(image, caption);
+  return box;
+}
+
+function createIntro() {
+  const [first, ...rest] = REPORT.introCards;
+  const intro = el("div", "intro");
+  const top = el("div", "intro__top");
+  top.append(createCard(first), createQrBox());
+  intro.append(top, ...rest.map(createCard));
   return intro;
 }
 

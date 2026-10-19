@@ -18,7 +18,7 @@ Anbindungen übernimmt der Dienstleister an den unten genannten Ersatzpunkten.
 - Die Person wählt eine **KPF**. Die erste A4-Seite zeigt Titel, KPF-Name, Zeitraum, zwei feste
   Einleitungstexte (Verein, CHANCENkurve) und einen **QR-Code** zur Website `https://www.chancenwerk.de`
   (URL steht zusätzlich als Text darunter), danach ohne eigene Überschrift die **Kinderliste**.
-  Die Texte stehen in `REPORT.introTexts` (`src/js/config.js`), der QR-Code ist ein statisches SVG
+  Die Texte stehen in `REPORT.introCards` (**fett** markiert Begriffe) (`src/js/config.js`), der QR-Code ist ein statisches SVG
   (`src/assets/images/qr-chancenwerk.svg`) und muss bei geänderter URL neu erzeugt werden.
   Die frühere Gruppenauswertung (Balkendiagramme je Fach) wurde entfernt.
   Der Text "an dieser Schule" ist für KPFs mit mehreren Schulen ggf. fachlich zu prüfen.
