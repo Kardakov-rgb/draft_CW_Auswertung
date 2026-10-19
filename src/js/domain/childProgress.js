@@ -69,6 +69,7 @@ export function summarizeChild(report, subjects, minPoints) {
   const perSubject = subjects.map((subject) => ({
     key: subject.key,
     label: subject.label,
+    levels: subject.levels ?? [],
     ...summarizeSubject(report.results?.[subject.key], minPoints),
   }));
   const testCount = perSubject.reduce((sum, subject) => sum + subject.testCount, 0);

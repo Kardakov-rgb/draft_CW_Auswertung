@@ -53,9 +53,12 @@ function createResults(childIndex, isLastOfKpfA) {
   DEMO_SUBJECTS.forEach((subject, subjectIndex) => {
     if (childIndex % 4 === 3 && subject === "german") return;
     const startOffset = childIndex === 5 ? 400 : 0;
-    /* Niveaustufe wechselt alle 7 Tests (je Kind versetzt, höchstens Stufe 5). Die Testnummer
-       beginnt bei jedem Niveauwechsel wieder bei 1. */
-    const levelOf = (i) => 1 + Math.min(4, Math.floor((i + childIndex * 2) / 7));
+    /* Niveaustufe steigt ab Test t1 und dann alle 8 Tests (je Kind und Fach versetzt, bis zur höchsten
+       Stufe des Fachs). Die Testnummer beginnt bei jedem Niveauwechsel wieder bei 1. */
+    const ladder = subject === "math" ? [1, 2, 3, 4] : [2, 4, 6];
+    const t1 = 26 + ((childIndex * 3 + subjectIndex * 2) % 6);
+    const levelOf = (i) =>
+      ladder[Math.min(ladder.length - 1, i < t1 ? 0 : 1 + Math.floor((i - t1) / 8))];
     results[subject] = Array.from({ length: DEMO_TESTS }, (_, i) => {
       const level = levelOf(i);
       let testNumber = 1;

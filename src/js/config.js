@@ -9,10 +9,12 @@ export const APP = {
   locale: "de-DE",
 };
 
-/* Fächer, in dieser Reihenfolge. Schlüssel = Schlüssel in den gelieferten Daten. */
+/* Fächer, in dieser Reihenfolge. Schlüssel = Schlüssel in den gelieferten Daten.
+   levels: mögliche Niveaustufen des Fachs, niedrigste zuerst. Je höher die Stufe, desto dunkler ihre
+   Farbe im Diagramm (Farben: --level-* in tokens.css). Bei Änderung der Stufen nur hier anpassen. */
 export const SUBJECTS = [
-  { key: "math", label: "Mathe" },
-  { key: "german", label: "Deutsch" },
+  { key: "math", label: "Mathe", levels: [1, 2, 3, 4] },
+  { key: "german", label: "Deutsch", levels: [2, 4, 6] },
 ];
 
 /* Texte der ersten Seite. */
@@ -79,6 +81,8 @@ export const CHILD = {
   /* Beschriftung der Niveau-Bereiche im Diagramm; die kurze Form gilt bei schmalen Bereichen. */
   levelLabel: "Niveau {level}",
   levelLabelShort: "N{level}",
+  /* Legende der Niveau-Farben (einmal je Seite, neben der Legende der Linien). */
+  levelLegend: { label: "Niveau", low: "niedriger", high: "höher" },
   /* Zusatz in Kinderliste und Infoblock nach einem Wechsel, z. B. "3 (zuvor 2)". */
   previousLevelHint: "zuvor",
   yAxisTitle: "Anzahl Aufgaben",

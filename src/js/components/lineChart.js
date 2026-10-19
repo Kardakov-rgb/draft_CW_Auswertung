@@ -3,11 +3,12 @@
 import { CHILD, CHILD_TABLE_COLUMNS, SERIES } from "../config.js";
 import { formatIsoDate } from "../domain/dateRange.js";
 import { fillTemplate, formatPercent } from "../domain/text.js";
+import { levelShade } from "../domain/levelScale.js";
 import { labelStep, niceTicks, pointPosition } from "../domain/scale.js";
 import { el } from "./reportParts.js";
 
 const NS = "http://www.w3.org/2000/svg";
-const VIEW = { width: 600, height: 140, left: 48, right: 16, top: 24, bottom: 38, inset: 16 };
+const VIEW = { width: 600, height: 133, left: 48, right: 16, top: 24, bottom: 38, inset: 16 };
 
 function svg(tag, attributes = {}, text) {
   const node = document.createElementNS(NS, tag);
@@ -29,6 +30,21 @@ function marker(kind, x, y) {
   return svg("circle", { ...attributes, cx: x, cy: y, r: 4.5 });
 }
 
+/* Legende der Niveau-Farben: heller = niedrigere Stufe, dunkler = höhere Stufe. */
+function createLevelLegendItem() {
+  const { label, low, high } = CHILD.levelLegend;
+  const item = el("li", "line-chart__legend-item");
+  const swatches = el("span", "level-scale");
+  swatches.setAttribute("aria-hidden", "true");
+  for (const shade of [1, 2, 4, 5]) {
+    const swatch = el("span", "level-scale__swatch");
+    swatch.style.setProperty("--level-strong", `var(--level-${shade})`);
+    swatches.append(swatch);
+  }
+  item.append(`${label}: ${low}`, swatches, high);
+  return item;
+}
+
 /* Legende der Reihen; auf einer Seite genügt eine für alle Diagramme. */
 export function createLegend() {
   const list = el("ul", "line-chart__legend");
@@ -47,10 +63,14 @@ export function createLegend() {
     item.append(icon, series.label);
     list.append(item);
   }
+  list.append(createLevelLegendItem());
   return list;
 }
 
-function createPlot({ rows, segments, title, description }) {
+const SHADE_STEPS = 5;
+const levelToken = (shade) => (shade === null ? "--level-unknown" : `--level-${shade}`);
+
+function createPlot({ rows, segments, levels, title, description }) {
   const plotWidth = VIEW.width - VIEW.left - VIEW.right;
   const plotHeight = VIEW.height - VIEW.top - VIEW.bottom;
   const maxValue = Math.max(...rows.map((row) => row.total));
@@ -67,31 +87,44 @@ function createPlot({ rows, segments, title, description }) {
     "aria-label": `${title}. ${description}`,
   });
 
-  /* Bereiche je Niveaustufe (abwechselnd getönt) mit Beschriftung über dem Diagramm. */
+  /* Bereiche je Niveaustufe: heller Hintergrund im Diagramm, kräftiger Streifen mit Beschriftung darüber.
+     Je höher die Stufe, desto dunkler (siehe domain/levelScale.js). */
   const slot = rows.length > 1 ? (plotWidth - 2 * VIEW.inset) / (rows.length - 1) : plotWidth;
   const left = VIEW.left;
   const right = VIEW.width - VIEW.right;
   segments
     .filter((segment) => segment.level !== null)
-    .forEach((segment, index) => {
+    .forEach((segment) => {
       const from = Math.max(left, x(segment.from) - slot / 2);
       const to = Math.min(right, x(segment.to) + slot / 2);
-      const band = svg("rect", {
-        class: `line-chart__band${index % 2 === 0 ? " line-chart__band--shaded" : ""}`,
-        x: from,
-        y: VIEW.top - 14,
-        width: to - from,
-        height: plotHeight + 14,
-      });
+      const token = levelToken(levelShade(levels, segment.level, SHADE_STEPS));
+      const group = svg("g");
+      group.style.setProperty("--level-strong", `var(${token})`);
+      group.style.setProperty("--level-soft", `var(${token}-soft)`);
+      group.style.setProperty("--level-text", `var(${token}-text)`);
       const template = to - from >= 56 ? CHILD.levelLabel : CHILD.levelLabelShort;
-      chart.append(
-        band,
+      group.append(
+        svg("rect", {
+          class: "line-chart__band",
+          x: from,
+          y: VIEW.top,
+          width: to - from,
+          height: plotHeight,
+        }),
+        svg("rect", {
+          class: "line-chart__strip",
+          x: from,
+          y: VIEW.top - 14,
+          width: to - from,
+          height: 14,
+        }),
         svg(
           "text",
           { class: "line-chart__band-label", x: (from + to) / 2, y: VIEW.top - 4 },
           fillTemplate(template, { level: segment.level }),
         ),
       );
+      chart.append(group);
     });
 
   for (const tick of ticks) {
@@ -229,7 +262,7 @@ function createTable({ rows, caption, locale }) {
 }
 
 /* subjectLabel: Name des Fachs; rows und segments: aus summarizeSubject (domain/childProgress.js). */
-export function createLineChart({ subjectLabel, rows, segments, locale }) {
+export function createLineChart({ subjectLabel, rows, segments, levels, locale }) {
   const title = fillTemplate(CHILD.chartTitle, { subject: subjectLabel });
   const first = rows[0];
   const last = rows.at(-1);
@@ -238,7 +271,7 @@ export function createLineChart({ subjectLabel, rows, segments, locale }) {
   const figure = el("figure", "line-chart");
   figure.append(
     el("figcaption", "line-chart__caption", title),
-    createPlot({ rows, segments, title, description }),
+    createPlot({ rows, segments, levels, title, description }),
     createTable({
       rows,
       caption: fillTemplate(CHILD.tableCaption, { subject: subjectLabel }),
