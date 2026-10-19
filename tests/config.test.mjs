@@ -22,8 +22,9 @@ test("Fächer haben eindeutige Schlüssel", () => {
   assert.equal(new Set(keys).size, keys.length);
 });
 
-test("Erste Seite: zwei Texte und eine Website mit QR-Code", () => {
-  assert.equal(REPORT.introTexts.length, 2);
+test("Erste Seite: zwei Infokarten und eine Website mit QR-Code", () => {
+  assert.equal(REPORT.introCards.length, 2);
+  for (const card of REPORT.introCards) assert.ok(card.title && card.text);
   assert.match(REPORT.website.url, /^https:\/\//);
   assert.match(REPORT.website.qrImage, /\.svg$/);
 });

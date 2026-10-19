@@ -17,3 +17,11 @@ export function formatPercent(
 export function fillTemplate(template, values) {
   return template.replace(/\{(\w+)\}/g, (match, name) => (name in values ? values[name] : match));
 }
+
+/* Zerlegt Text mit **fett** in Teile: [{ text, strong }]. Ohne Markierung ein einziger Teil. */
+export function parseEmphasis(text) {
+  return text
+    .split(/\*\*(.+?)\*\*/g)
+    .map((part, index) => ({ text: part, strong: index % 2 === 1 }))
+    .filter((part) => part.text !== "");
+}

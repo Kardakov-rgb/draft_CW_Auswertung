@@ -18,12 +18,24 @@ export const SUBJECTS = [
 /* Texte der ersten Seite. */
 export const REPORT = {
   title: "Ergebnisse der CHANCENkurve",
-  /* Zwei Absätze über dem QR-Code-Block; der QR-Code führt zur Website des Vereins. */
-  introTexts: [
-    "Chancenwerk e.V. möchte die Chancen auf einen gerechteren Bildungserfolg von Kindern und Jugendlichen unabhängig von ihrer sozioökonomischen Herkunft erhöhen. Daher unterstützen wir Schüler:innen beim Lernen in ihrer Schule oder digital zu Hause, deren Erziehungsberechtigte ihnen aus zeitlichen, sprachlichen oder finanziellen Gründen nicht helfen können. Mehr Informationen über unseren Verein, unsere Angebote und unsere Wirkung finden Sie auf unserer Website:",
-    "Die CHANCENkurve ist unser Instrument zur Lernverlaufsdiagnostik. Sie basiert auf den Levumi-Tests und macht den individuellen Lernfortschritt sichtbar. Im Rahmen der Lernförderung an dieser Schule findet sie in der Regel alle vier bis sechs Wochen statt. Im Mittelpunkt stehen grundlegende Kompetenzen in Mathematik und Deutsch. So erkennen wir früh, wo noch Basiswissen fehlt, und können genau dort ansetzen.",
+  /* Zwei Infokarten unter dem Kopf. **fett** im Text markiert wichtige Begriffe. */
+  introCards: [
+    {
+      title: "Wer wir sind",
+      text: "Chancenwerk e.V. möchte die Chancen auf einen **gerechteren Bildungserfolg** von Kindern und Jugendlichen **unabhängig von ihrer sozioökonomischen Herkunft** erhöhen. Daher unterstützen wir Schüler:innen beim Lernen in ihrer Schule oder digital zu Hause, deren Erziehungsberechtigte ihnen aus zeitlichen, sprachlichen oder finanziellen Gründen nicht helfen können. Mehr Informationen über unseren Verein, unsere Angebote und unsere Wirkung finden Sie auf unserer Website:",
+    },
+    {
+      title: "Was ist die CHANCENkurve?",
+      text: "Die CHANCENkurve ist unser Instrument zur **Lernverlaufsdiagnostik**. Sie basiert auf den Levumi-Tests und macht den individuellen Lernfortschritt sichtbar. Im Rahmen der Lernförderung an dieser Schule findet sie in der Regel **alle vier bis sechs Wochen** statt. Im Mittelpunkt stehen grundlegende Kompetenzen in **Mathematik und Deutsch**. So erkennen wir früh, wo noch Basiswissen fehlt, und können genau dort ansetzen.",
+    },
   ],
-  website: { url: "https://www.chancenwerk.de", qrImage: "assets/images/qr-chancenwerk.svg" },
+  /* Hervorgehobener QR-Code-Block neben der ersten Karte; der Code führt zu website.url. */
+  website: {
+    url: "https://www.chancenwerk.de",
+    qrImage: "assets/images/qr-chancenwerk.svg",
+    callToAction: "Mehr über uns erfahren",
+    hint: "QR-Code scannen oder Adresse aufrufen",
+  },
   qrAlt: "QR-Code zur Website von Chancenwerk e.V.",
   scopeLabel: "KPF",
   periodLabel: "Zeitraum",

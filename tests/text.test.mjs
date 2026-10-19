@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { fillTemplate, formatPercent } from "../src/js/domain/text.js";
+import { fillTemplate, formatPercent, parseEmphasis } from "../src/js/domain/text.js";
 
 const plain = (text) => text.replace(/\s/g, " ");
 
@@ -12,4 +12,13 @@ test("formatPercent: deutsche Schreibweise", () => {
 
 test("fillTemplate ersetzt bekannte Platzhalter und lässt unbekannte stehen", () => {
   assert.equal(fillTemplate("{a} und {b}", { a: "X" }), "X und {b}");
+});
+
+test("parseEmphasis trennt fett markierte Teile", () => {
+  assert.deepEqual(parseEmphasis("a **b** c"), [
+    { text: "a ", strong: false },
+    { text: "b", strong: true },
+    { text: " c", strong: false },
+  ]);
+  assert.deepEqual(parseEmphasis("ohne"), [{ text: "ohne", strong: false }]);
 });
