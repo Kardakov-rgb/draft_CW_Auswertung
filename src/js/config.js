@@ -39,8 +39,9 @@ export const REPORT = {
   qrAlt: "QR-Code zur Website von Chancenwerk e.V.",
   scopeLabel: "KPF",
   periodLabel: "Zeitraum",
-  /* Platzhalter: Logo und Fußzeile übernimmt der Dienstleister aus dem Corporate-Design-Template. */
-  logoPlaceholder: "Logo",
+  /* Logo (hellgrün, transparent: steht auf einer dunkelgrünen Fläche). Die Fußzeile ist ein Platzhalter,
+     den der Dienstleister aus dem Corporate-Design-Template übernimmt. */
+  logo: { src: "assets/images/chancenwerk-logo.png", alt: "Chancenwerk e.V." },
   footer: "Platzhalter für Fußzeile (Name, Anschrift, Kontakt der Organisation)",
 };
 

@@ -36,7 +36,7 @@ Anbindungen übernimmt der Dienstleister an den unten genannten Ersatzpunkten.
 - Fächer, Farben (als Token-Namen), Texte und Dateinamen-Präfix stehen in `src/js/config.js`.
 - **Rollen:** Schulteambegleitung und Ansprechperson sehen nur die KPFs ihrer Zuordnung. Die Demo
   hat keine Anmeldung; `getKpfs()` liefert in der Produktivversion nur erlaubte KPFs.
-- **Platzhalter im Layout:** Logo und Fußzeile (Name, Anschrift, Kontakt) übernimmt der Dienstleister
+- **Platzhalter im Layout:** Das Logo ist eingebaut (`REPORT.logo`, hellgrünes PNG auf dunkelgrüner Fläche). Die Fußzeile (Name, Anschrift, Kontakt) übernimmt der Dienstleister
   aus dem Corporate-Design-Template. Echte Organisationsdaten stehen nicht im öffentlichen Repo.
 
 ### 2. Kinderliste und Auswertung pro Kind (Sammel-PDF)
