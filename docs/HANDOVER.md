@@ -90,8 +90,8 @@ erhalten bleiben.
 
 ## Von den Rohdaten zur Auswertung
 
-Die Testdaten liegen als Rohdaten vor und müssen zu den Zahlen für `getChildReports()` und
-`getOutcomes()` zusammengesetzt werden. Das ist eine **eigene Aufgabe für den Dienstleister**
+Die Testdaten liegen als Rohdaten vor und müssen zu den Zahlen für `getChildReports()`
+zusammengesetzt werden. Das ist eine **eigene Aufgabe für den Dienstleister**
 (Aggregation in der Datenbank oder im Server, nicht im Browser). Die Demo zeigt nur das Ergebnis.
 
 Bekannte Spalten der Rohdaten: `_id; userID; lessonID; exerciseID; testNumber; date; kpf; grade; type;
