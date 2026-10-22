@@ -293,6 +293,7 @@
 
 .data-table--compact .data-table__cell {
   padding-block: var(--space-half);
+  line-height: 1.35;
 }
 
 .data-table__head {
@@ -349,6 +350,11 @@
 
 .info-list__value {
   margin: 0;
+}
+
+/* Niveau mit "(zuvor …)" steht über die ganze Breite, damit es nicht umbricht. */
+.info-list__value--wide {
+  grid-column: 2 / -1;
 }
 
 .child-section {
