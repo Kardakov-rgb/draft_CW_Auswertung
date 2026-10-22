@@ -8,7 +8,7 @@ import { labelStep, niceTicks, pointPosition } from "../domain/scale.js";
 import { el } from "./reportParts.js";
 
 const NS = "http://www.w3.org/2000/svg";
-const VIEW = { width: 600, height: 164, left: 48, right: 16, top: 24, bottom: 38, inset: 16 };
+const VIEW = { width: 600, height: 185, left: 48, right: 16, top: 24, bottom: 38, inset: 16 };
 
 function svg(tag, attributes = {}, text) {
   const node = document.createElementNS(NS, tag);
