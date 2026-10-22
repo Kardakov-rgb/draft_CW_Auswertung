@@ -103,7 +103,11 @@ function createChildPage({ kpf, period, summary, locale }) {
   for (const field of CHILD_FIELDS) {
     info.append(
       el("dt", "info-list__label", field.label),
-      el("dd", "info-list__value", formatChildField(summary, field)),
+      el(
+        "dd",
+        `info-list__value${field.type === "level" ? " info-list__value--wide" : ""}`,
+        formatChildField(summary, field),
+      ),
     );
   }
   page.append(info);

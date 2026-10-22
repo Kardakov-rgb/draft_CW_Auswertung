@@ -68,6 +68,9 @@ Anbindungen übernimmt der Dienstleister an den unten genannten Ersatzpunkten.
   Deutsch 2, 4, 6. Eine Stufe außerhalb der Leiter wird grau dargestellt. Die Farbstufen werden gleichmäßig
   auf die Leiter verteilt (`domain/levelScale.js`), die höchste Stufe ist immer die dunkelste.
   Die Demo-Daten steigen ab Test 26 bis 31 und dann alle 8 Tests.
+- **Platz auf der Kind-Seite:** Das Diagramm ist so hoch, dass je Fach etwa **5 Testzeitpunkte** (Diagramm und
+  Tabellenzeilen) zusammen auf eine A4-Seite passen. Bei mehr Tests läuft die Seite über, die Fußzeile steht
+  dann allein auf der nächsten Seite. Eine saubere Fortsetzungsseite ist noch nicht gebaut (Entscheidung offen).
 - **Kein automatischer Fließtext** über einzelne Kinder, nur Zahlen und Grafik. (Bitte bestätigen.)
 - Angezeigte Angaben je Kind: `CHILD_FIELDS` in `src/js/config.js` (Name, Klasse, Fächer, Anzahl Tests,
   Niveau). Tabellenspalten: `CHILD_TABLE_COLUMNS`, Linien: `SERIES`.
